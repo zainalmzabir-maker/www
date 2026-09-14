@@ -1,15 +1,16 @@
 /**
  * SEMEKAR Web App Engine
- * URL Endpoint: Google Apps Script Web App
+ * Portal Rasmi SMK Kamarul Ariffin
+ * Endpoint: Google Apps Script Web App
  */
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJsneV6VGEqRbGnxHr1mpXpv2ihZUYcwSM6BFQvymaw36kIyZ1c3yhSw/exec";
 
-// Kredensial Log Masuk Pentadbir
+// Kredensial Log Masuk Admin
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "semekar@123";
 
-// Data sandaran Buku Pengurusan 2026
+// Data Sandaran (Fallback Data) Sesi 2026
 const FALLBACK_TEACHERS = [
   { no: 1, nama: "En. Abd Hadi bin Adman", jawatan: "Pengetua", gred: "DG13" },
   { no: 2, nama: "En. Masnon bin Amat", jawatan: "GPK Pentadbiran", gred: "DG12" },
@@ -48,19 +49,19 @@ const FALLBACK_ANNOUNCEMENTS = [
     tajuk: "Pendaftaran Sesi Persekolahan 2026",
     tarikh: "10 Januari 2026",
     kategori: "Penting",
-    kandungan: "Pendaftaran pelajar Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 diadakan di Dewan Semekar Hebat."
+    kandungan: "Pendaftaran pelajar Tingkatan 1 dan pengesahan pendaftaran semula bagi Tingkatan 2 hingga 5 berjalan lancar di Dewan Semekar Hebat."
   },
   {
     tajuk: "Kejohanan Olahraga Tahunan Kali Ke-27",
     tarikh: "13 Februari 2026",
     kategori: "Kokurikulum",
-    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Semua murid dan guru dijemput menyemarakkan kejohanan."
+    kandungan: "Acara sukan tahunan melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Semua warga sekolah dijemput memeriahkan kejohanan."
   },
   {
     tajuk: "Program Transformasi Sekolah (TS25) & Peluasan KBAT",
     tarikh: "Sesi 2026",
     kategori: "Akademik",
-    kandungan: "Pembudayaan PAK21 dan Kemahiran Berfikir Aras Tinggi ke arah merealisasikan kemenjadian murid yang holistik."
+    kandungan: "Pembudayaan amalan PAK21 dan Kemahiran Berfikir Aras Tinggi (KBAT) ke arah kecemerlangan kemenjadian murid."
   }
 ];
 
@@ -74,22 +75,212 @@ const FALLBACK_TAKWIM = [
 
 let allTeachersData = [...FALLBACK_TEACHERS];
 
-document.addEventListener("DOMContentLoaded", () => {
-  setupMobileMenu();
-  setupSearch();
-  checkAdminSession();
-  fetchGoogleData();
-});
+// =================== PENGESAHAN & KAWALAN ADMIN (WINDOW BINDING) ===================
+window.openLoginModal = function() {
+  const modal = document.getElementById("login-modal");
+  const err = document.getElementById("login-error");
+  if (modal) modal.classList.remove("hidden");
+  if (err) err.classList.add("hidden");
+};
 
-function setupMobileMenu() {
-  const btn = document.getElementById("mobile-menu-btn");
-  const menu = document.getElementById("mobile-menu");
-  if (btn && menu) {
-    btn.addEventListener("click", () => menu.classList.toggle("hidden"));
+window.closeLoginModal = function() {
+  const modal = document.getElementById("login-modal");
+  if (modal) modal.classList.add("hidden");
+};
+
+window.handleLogin = function(e) {
+  if (e && e.preventDefault) e.preventDefault();
+
+  const userInput = document.getElementById("login-username");
+  const passInput = document.getElementById("login-password");
+  const err = document.getElementById("login-error");
+
+  const u = userInput ? userInput.value.trim().toLowerCase() : "";
+  const p = passInput ? passInput.value.trim() : "";
+
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    sessionStorage.setItem("semekar_admin", "true");
+    window.closeLoginModal();
+    window.checkAdminSession();
+    window.openAdminPanel();
+    if (userInput) userInput.value = "";
+    if (passInput) passInput.value = "";
+  } else {
+    if (err) err.classList.remove("hidden");
+  }
+  return false;
+};
+
+window.handleLogout = function() {
+  sessionStorage.removeItem("semekar_admin");
+  window.closeAdminPanel();
+  window.checkAdminSession();
+};
+
+window.checkAdminSession = function() {
+  const isAdmin = sessionStorage.getItem("semekar_admin") === "true";
+  const btnAdmin = document.getElementById("admin-panel-btn");
+  const navLoginBtn = document.getElementById("nav-login-btn");
+
+  if (isAdmin) {
+    if (btnAdmin) btnAdmin.classList.remove("hidden");
+    if (navLoginBtn) {
+      navLoginBtn.innerHTML = `<i class="fa-solid fa-user-check mr-1"></i> Admin Aktif`;
+      navLoginBtn.onclick = window.openAdminPanel;
+    }
+  } else {
+    if (btnAdmin) btnAdmin.classList.add("hidden");
+    if (navLoginBtn) {
+      navLoginBtn.innerHTML = `<i class="fa-solid fa-lock mr-1"></i> Admin Login`;
+      navLoginBtn.onclick = window.openLoginModal;
+    }
+  }
+};
+
+window.openAdminPanel = function() {
+  const panel = document.getElementById("admin-panel-modal");
+  if (panel) panel.classList.remove("hidden");
+};
+
+window.closeAdminPanel = function() {
+  const panel = document.getElementById("admin-panel-modal");
+  if (panel) panel.classList.add("hidden");
+};
+
+window.switchAdminTab = function(tabId) {
+  const tabs = ["tab-pengumuman", "tab-takwim", "tab-guru"];
+  const forms = ["form-add-pengumuman", "form-add-takwim", "form-add-guru"];
+
+  tabs.forEach((t, i) => {
+    const btn = document.getElementById("btn-" + t);
+    const form = document.getElementById(forms[i]);
+
+    if (btn && form) {
+      if (t === tabId) {
+        btn.className = "py-2 px-4 font-bold border-b-2 border-red-900 text-red-900";
+        form.classList.remove("hidden");
+      } else {
+        btn.className = "py-2 px-4 font-semibold text-gray-500 hover:text-red-900";
+        form.classList.add("hidden");
+      }
+    }
+  });
+
+  const statusEl = document.getElementById("admin-action-status");
+  if (statusEl) statusEl.classList.add("hidden");
+};
+
+// =================== PENGHANTARAN DATA (POST) ===================
+async function postDataToScript(action, data, submitBtnId) {
+  const statusEl = document.getElementById("admin-action-status");
+  const btn = document.getElementById(submitBtnId);
+
+  if (btn) {
+    btn.disabled = true;
+    btn.dataset.origText = btn.innerHTML;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan...`;
+  }
+
+  if (statusEl) {
+    statusEl.className = "mt-4 text-xs font-semibold text-blue-600 block";
+    statusEl.textContent = "Sedang menghantar data ke Google Sheet...";
+    statusEl.classList.remove("hidden");
+  }
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: action, data: data })
+    });
+
+    const result = await res.json();
+    if (result.status === "success") {
+      if (statusEl) {
+        statusEl.className = "mt-4 text-xs font-semibold text-emerald-600 block";
+        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Rekod berjaya disimpan ke Google Sheet!`;
+      }
+      fetchGoogleData();
+    } else {
+      throw new Error(result.message || "Ralat pelayan");
+    }
+  } catch (err) {
+    if (statusEl) {
+      statusEl.className = "mt-4 text-xs font-semibold text-red-600 block";
+      statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Ralat: ${err.message}`;
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = btn.dataset.origText || "Simpan";
+    }
   }
 }
 
-// 1. Ambil Data Dari Apps Script
+window.submitNewPengumuman = function(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const titleEl = document.getElementById("ann-title");
+  const dateEl = document.getElementById("ann-date");
+  const catEl = document.getElementById("ann-cat");
+  const descEl = document.getElementById("ann-desc");
+
+  const data = {
+    tajuk: titleEl ? titleEl.value.trim() : "",
+    tarikh: dateEl ? dateEl.value.trim() : "",
+    kategori: catEl ? catEl.value.trim() : "",
+    kandungan: descEl ? descEl.value.trim() : ""
+  };
+
+  postDataToScript("addPengumuman", data, "btn-submit-ann").then(() => {
+    const form = document.getElementById("form-add-pengumuman");
+    if (form) form.reset();
+  });
+  return false;
+};
+
+window.submitNewTakwim = function(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const dateEl = document.getElementById("takwim-date");
+  const actEl = document.getElementById("takwim-act");
+  const catEl = document.getElementById("takwim-cat");
+  const actionEl = document.getElementById("takwim-action");
+
+  const data = {
+    tarikh: dateEl ? dateEl.value.trim() : "",
+    aktiviti: actEl ? actEl.value.trim() : "",
+    kategori: catEl ? catEl.value.trim() : "",
+    tindakan: actionEl ? actionEl.value.trim() : ""
+  };
+
+  postDataToScript("addTakwim", data, "btn-submit-takwim").then(() => {
+    const form = document.getElementById("form-add-takwim");
+    if (form) form.reset();
+  });
+  return false;
+};
+
+window.submitNewGuru = function(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const noEl = document.getElementById("guru-no");
+  const namaEl = document.getElementById("guru-nama");
+  const jawatanEl = document.getElementById("guru-jawatan");
+  const gredEl = document.getElementById("guru-gred");
+
+  const data = {
+    no: noEl ? noEl.value.trim() : "",
+    nama: namaEl ? namaEl.value.trim() : "",
+    jawatan: jawatanEl ? jawatanEl.value.trim() : "",
+    gred: gredEl ? gredEl.value.trim() : ""
+  };
+
+  postDataToScript("addGuru", data, "btn-submit-guru").then(() => {
+    const form = document.getElementById("form-add-guru");
+    if (form) form.reset();
+  });
+  return false;
+};
+
+// =================== PENGAMBILAN DATA (GET) ===================
 async function fetchGoogleData() {
   const statusEl = document.getElementById("cms-status");
   const lastUpdatedEl = document.getElementById("last-updated");
@@ -97,7 +288,7 @@ async function fetchGoogleData() {
   try {
     const res = await fetch(APPS_SCRIPT_URL);
     if (!res.ok) throw new Error("Respons pelayan tidak sah");
-    
+
     const data = await res.json();
 
     if (data.status === "success") {
@@ -128,16 +319,16 @@ async function fetchGoogleData() {
         lastUpdatedEl.textContent = `Disemak: ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
       }
     } else {
-      throw new Error(data.message || "Ralat memproses payload");
+      throw new Error(data.message || "Gagal memproses fail JSON");
     }
   } catch (err) {
-    console.warn("Gagal memuat turun data Google Sheets. Memaparkan data sandaran:", err);
+    console.warn("Gagal berhubung dengan Google Apps Script. Memaparkan data sandaran:", err);
     renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
     renderTeachers(FALLBACK_TEACHERS);
     renderTakwim(FALLBACK_TAKWIM);
 
     if (statusEl) {
-      statusEl.innerHTML = `<span class='text-amber-700 font-semibold'><i class='fa-solid fa-triangle-exclamation text-amber-500 mr-1'></i> Mod Luar Talian: Memaparkan Data Sandaran 2026</span>`;
+      statusEl.innerHTML = `<span class='text-amber-700 font-semibold'><i class='fa-solid fa-triangle-exclamation text-amber-500 mr-1'></i> Mod Sandaran: Memaparkan Data Pratetap 2026</span>`;
     }
   }
 }
@@ -203,151 +394,32 @@ function setupSearch() {
   });
 }
 
-// 2. Pengurusan Log Masuk & Sesi Admin
-function openLoginModal() {
-  document.getElementById("login-modal").classList.remove("hidden");
-  document.getElementById("login-error").classList.add("hidden");
-}
-
-function closeLoginModal() {
-  document.getElementById("login-modal").classList.add("hidden");
-}
-
-function handleLogin(e) {
-  e.preventDefault();
-  const u = document.getElementById("login-username").value.trim();
-  const p = document.getElementById("login-password").value.trim();
-
-  if (u === ADMIN_USER && p === ADMIN_PASS) {
-    sessionStorage.setItem("semekar_admin", "true");
-    closeLoginModal();
-    checkAdminSession();
-    openAdminPanel();
-  } else {
-    document.getElementById("login-error").classList.remove("hidden");
+function setupMobileMenu() {
+  const btn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  if (btn && menu) {
+    btn.onclick = () => menu.classList.toggle("hidden");
   }
 }
 
-function handleLogout() {
-  sessionStorage.removeItem("semekar_admin");
-  closeAdminPanel();
-  checkAdminSession();
-}
+// Inisialisasi Aplikasi
+document.addEventListener("DOMContentLoaded", () => {
+  setupMobileMenu();
+  setupSearch();
+  window.checkAdminSession();
 
-function checkAdminSession() {
-  const isAdmin = sessionStorage.getItem("semekar_admin") === "true";
-  const btnAdmin = document.getElementById("admin-panel-btn");
-  const navLoginBtn = document.getElementById("nav-login-btn");
+  // Fail-safe: Pasang listener borang secara terus
+  const loginForm = document.getElementById("admin-login-form");
+  if (loginForm) loginForm.onsubmit = window.handleLogin;
 
-  if (isAdmin) {
-    if (btnAdmin) btnAdmin.classList.remove("hidden");
-    if (navLoginBtn) navLoginBtn.innerHTML = `<i class="fa-solid fa-user-check mr-1"></i> Admin Aktif`;
-  } else {
-    if (btnAdmin) btnAdmin.classList.add("hidden");
-    if (navLoginBtn) navLoginBtn.innerHTML = `<i class="fa-solid fa-lock mr-1"></i> Admin Login`;
-  }
-}
+  const annForm = document.getElementById("form-add-pengumuman");
+  if (annForm) annForm.onsubmit = window.submitNewPengumuman;
 
-function openAdminPanel() {
-  document.getElementById("admin-panel-modal").classList.remove("hidden");
-}
+  const takwimForm = document.getElementById("form-add-takwim");
+  if (takwimForm) takwimForm.onsubmit = window.submitNewTakwim;
 
-function closeAdminPanel() {
-  document.getElementById("admin-panel-modal").classList.add("hidden");
-}
+  const guruForm = document.getElementById("form-add-guru");
+  if (guruForm) guruForm.onsubmit = window.submitNewGuru;
 
-function switchAdminTab(tabId) {
-  const tabs = ["tab-pengumuman", "tab-takwim", "tab-guru"];
-  const forms = ["form-add-pengumuman", "form-add-takwim", "form-add-guru"];
-
-  tabs.forEach((t, i) => {
-    const btn = document.getElementById("btn-" + t);
-    const form = document.getElementById(forms[i]);
-
-    if (t === tabId) {
-      btn.className = "py-2 px-4 font-bold border-b-2 border-red-900 text-red-900";
-      form.classList.remove("hidden");
-    } else {
-      btn.className = "py-2 px-4 font-semibold text-gray-500 hover:text-red-900";
-      form.classList.add("hidden");
-    }
-  });
-
-  const statusEl = document.getElementById("admin-action-status");
-  statusEl.classList.add("hidden");
-}
-
-// 3. Penghantaran Data (POST) ke Google Apps Script
-async function postDataToScript(action, data, submitBtnId) {
-  const statusEl = document.getElementById("admin-action-status");
-  const btn = document.getElementById(submitBtnId);
-
-  btn.disabled = true;
-  const originalText = btn.innerHTML;
-  btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan...`;
-
-  statusEl.className = "mt-4 text-xs font-semibold text-blue-600 block";
-  statusEl.textContent = "Sedang menghantar data ke Google Sheet...";
-
-  try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: action, data: data })
-    });
-
-    const result = await res.json();
-    if (result.status === "success") {
-      statusEl.className = "mt-4 text-xs font-semibold text-emerald-600 block";
-      statusEl.innerHTML = `<i class="fa-solid fa-check-circle mr-1"></i> Maklumat berjaya disimpan ke Google Sheet!`;
-      fetchGoogleData();
-    } else {
-      throw new Error(result.message);
-    }
-  } catch (err) {
-    statusEl.className = "mt-4 text-xs font-semibold text-red-600 block";
-    statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Ralat: ${err.message}`;
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = originalText;
-  }
-}
-
-function submitNewPengumuman(e) {
-  e.preventDefault();
-  const data = {
-    tajuk: document.getElementById("ann-title").value.trim(),
-    tarikh: document.getElementById("ann-date").value.trim(),
-    kategori: document.getElementById("ann-cat").value.trim(),
-    kandungan: document.getElementById("ann-desc").value.trim()
-  };
-  postDataToScript("addPengumuman", data, "btn-submit-ann").then(() => {
-    document.getElementById("form-add-pengumuman").reset();
-  });
-}
-
-function submitNewTakwim(e) {
-  e.preventDefault();
-  const data = {
-    tarikh: document.getElementById("takwim-date").value.trim(),
-    aktiviti: document.getElementById("takwim-act").value.trim(),
-    kategori: document.getElementById("takwim-cat").value.trim(),
-    tindakan: document.getElementById("takwim-action").value.trim()
-  };
-  postDataToScript("addTakwim", data, "btn-submit-takwim").then(() => {
-    document.getElementById("form-add-takwim").reset();
-  });
-}
-
-function submitNewGuru(e) {
-  e.preventDefault();
-  const data = {
-    no: document.getElementById("guru-no").value.trim(),
-    nama: document.getElementById("guru-nama").value.trim(),
-    jawatan: document.getElementById("guru-jawatan").value.trim(),
-    gred: document.getElementById("guru-gred").value.trim()
-  };
-  postDataToScript("addGuru", data, "btn-submit-guru").then(() => {
-    document.getElementById("form-add-guru").reset();
-  });
-}
+  fetchGoogleData();
+});
