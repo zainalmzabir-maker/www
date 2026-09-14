@@ -225,16 +225,28 @@ function renderAnnouncements(items) {
   `).join("");
 }
 
+// HANYA PAPAR 3 LAJUR (BIL, NAMA, JAWATAN) & FILTER SEBARANG TEKS GRED
 function renderTeachers(teachers) {
   const tbody = document.getElementById("teachers-table-body");
   if (!tbody) return;
-  tbody.innerHTML = teachers.map((t, idx) => `
-    <tr class="hover:bg-red-50/40 transition">
-      <td class="p-3 font-medium text-gray-500">${t.no || idx + 1}</td>
-      <td class="p-3 font-semibold text-gray-900">${t.nama || "-"}</td>
-      <td class="p-3 text-red-900 font-medium">${t.jawatan || "-"}</td>
-    </tr>
-  `).join("");
+
+  tbody.innerHTML = teachers.map((t, idx) => {
+    const no = t.no || (idx + 1);
+    let nama = t.nama || t["nama guru"] || "-";
+    let jawatan = t.jawatan || "-";
+
+    // Padam sebarang sebutan kod gred jika terselit dalam data
+    nama = String(nama).replace(/\b(DG\d+|N\d+|C\d+|H\d+)\b/gi, "").trim();
+    jawatan = String(jawatan).replace(/\b(DG\d+|N\d+|C\d+|H\d+)\b/gi, "").trim();
+
+    return `
+      <tr class="hover:bg-red-50/40 transition">
+        <td class="p-3 font-medium text-gray-500">${no}</td>
+        <td class="p-3 font-semibold text-gray-900">${nama}</td>
+        <td class="p-3 text-red-900 font-medium">${jawatan}</td>
+      </tr>
+    `;
+  }).join("");
 }
 
 function renderTakwim(events) {
