@@ -14,13 +14,13 @@
   <header class="bg-red-950 text-gray-200 text-xs py-2 px-4 sm:px-8 border-b border-red-900">
     <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
       <div class="flex items-center space-x-4">
-        <span><i class="fa-solid fa-school text-yellow-500 mr-1"></i> Kod Sekolah: <strong>JEA7039</strong></span>
-        <span><i class="fa-solid fa-location-dot text-yellow-500 mr-1"></i> Labis, Segamat, Johor</span>
+        <span><i class="fa-solid fa-school text-yellow-500 mr-1"></i> Kod Sekolah: <strong>JEA7039</strong>[cite: 1, 2]</span>
+        <span><i class="fa-solid fa-location-dot text-yellow-500 mr-1"></i> Labis, Segamat, Johor[cite: 1, 2]</span>
       </div>
       <div class="flex items-center space-x-4">
-        <a href="tel:079255793" class="hover:text-yellow-400 transition"><i class="fa-solid fa-phone mr-1"></i> 07-9255793</a>
-        <a href="mailto:jea7039@moe.edu.my" class="hover:text-yellow-400 transition"><i class="fa-solid fa-envelope mr-1"></i> jea7039@moe.edu.my</a>
-        <button id="nav-login-btn" type="button" class="text-yellow-400 hover:text-white font-bold ml-2 cursor-pointer transition">
+        <a href="tel:079255793" class="hover:text-yellow-400 transition"><i class="fa-solid fa-phone mr-1"></i> 07-9255793[cite: 1, 2]</a>
+        <a href="mailto:jea7039@moe.edu.my" class="hover:text-yellow-400 transition"><i class="fa-solid fa-envelope mr-1"></i> jea7039@moe.edu.my[cite: 1, 2]</a>
+        <button id="nav-login-btn" type="button" onclick="openLoginModal()" class="text-yellow-400 hover:text-white font-bold ml-2 cursor-pointer transition">
           <i class="fa-solid fa-lock mr-1"></i> Admin Login
         </button>
       </div>
@@ -36,7 +36,7 @@
         </div>
         <div>
           <h1 class="text-lg sm:text-xl font-black text-red-950 tracking-tight leading-none">SMK KAMARUL ARIFFIN</h1>
-          <p class="text-xs text-gray-500 tracking-wider">SEMEKAR HEBAT • KESUNGGUHAN KUNCI KECEMERLANGAN</p>
+          <p class="text-xs text-gray-500 tracking-wider">SEMEKAR HEBAT • KESUNGGUHAN KUNCI KECEMERLANGAN[cite: 1, 2]</p>
         </div>
       </div>
 
@@ -51,25 +51,25 @@
         <a href="#hubungi" class="bg-red-900 text-white px-4 py-2 rounded-lg hover:bg-red-800 transition">Hubungi</a>
       </div>
 
-      <button id="mobile-menu-btn" type="button" class="lg:hidden text-gray-700 hover:text-red-900 p-2">
+      <button id="mobile-menu-btn" type="button" onclick="toggleMobileMenu()" class="lg:hidden text-gray-700 hover:text-red-900 p-2 cursor-pointer">
         <i class="fa-solid fa-bars text-2xl"></i>
       </button>
     </div>
 
     <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 pt-2 pb-4 space-y-2 text-sm font-medium">
-      <a href="#utama" class="block py-2 text-gray-700 hover:text-red-900">Utama</a>
-      <a href="#pengumuman" class="block py-2 text-gray-700 hover:text-red-900">Pengumuman</a>
-      <a href="#profil" class="block py-2 text-gray-700 hover:text-red-900">Profil</a>
-      <a href="#pentadbiran" class="block py-2 text-gray-700 hover:text-red-900">Pengurusan 2026</a>
-      <a href="#bidang" class="block py-2 text-gray-700 hover:text-red-900">Kurikulum & HEM</a>
-      <a href="#kokurikulum" class="block py-2 text-gray-700 hover:text-red-900">Kokurikulum</a>
-      <a href="#takwim" class="block py-2 text-gray-700 hover:text-red-900">Takwim</a>
+      <a href="#utama" class="block py-2 text-gray-700">Utama</a>
+      <a href="#pengumuman" class="block py-2 text-gray-700">Pengumuman</a>
+      <a href="#profil" class="block py-2 text-gray-700">Profil</a>
+      <a href="#pentadbiran" class="block py-2 text-gray-700">Pengurusan 2026</a>
+      <a href="#bidang" class="block py-2 text-gray-700">Kurikulum & HEM</a>
+      <a href="#kokurikulum" class="block py-2 text-gray-700">Kokurikulum</a>
+      <a href="#takwim" class="block py-2 text-gray-700">Takwim</a>
       <a href="#hubungi" class="block py-2 text-red-900 font-bold">Hubungi Kami</a>
-      <button id="mobile-login-btn" type="button" class="w-full text-left py-2 text-yellow-600 font-bold border-t">Admin Login</button>
+      <button type="button" onclick="openLoginModal()" class="w-full text-left py-2 text-yellow-600 font-bold border-t cursor-pointer">Admin Login</button>
     </div>
   </nav>
 
-  <!-- HERO SECTION -->
+  <!-- HERO -->
   <section id="utama" class="hero-pattern relative text-white py-20 px-4 sm:px-8">
     <div class="max-w-5xl mx-auto text-center relative z-10">
       <span class="inline-block bg-yellow-500 text-red-950 font-bold text-xs uppercase px-3 py-1 rounded-full mb-4 shadow">
@@ -79,7 +79,7 @@
         Selamat Datang ke SMK Kamarul Ariffin
       </h2>
       <p class="text-base sm:text-lg text-red-100 max-w-3xl mx-auto mb-8 leading-relaxed">
-        "Kesungguhan Kunci Kecemerlangan" — Komited melahirkan insan berkualiti melalui pemantapan kurikulum, sahsiah terpuji, dan kebitaraan kokurikulum.
+        "Kesungguhan Kunci Kecemerlangan" — Komited melahirkan insan berkualiti melalui pemantapan kurikulum, sahsiah terpuji, dan kebitaraan kokurikulum[cite: 1, 2].
       </p>
       <div class="flex flex-wrap justify-center gap-4">
         <a href="#pengumuman" class="bg-yellow-500 hover:bg-yellow-400 text-red-950 font-bold px-6 py-3 rounded-lg shadow transition">
@@ -105,15 +105,15 @@
         </span>
       </div>
       <div class="flex items-center space-x-3">
-        <div class="text-xs text-gray-500 font-mono" id="last-updated">Terkini: Sesi Persekolahan 2026</div>
-        <button id="admin-panel-btn" type="button" class="hidden bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-sm cursor-pointer">
+        <div class="text-xs text-gray-500 font-mono" id="last-updated">Terkini: Sesi 2026</div>
+        <button id="admin-panel-btn" type="button" onclick="openAdminPanel()" class="hidden bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition shadow-sm cursor-pointer">
           <i class="fa-solid fa-gear mr-1"></i> Panel Kemas Kini
         </button>
       </div>
     </div>
   </div>
 
-  <!-- PENGUMUMAN DARI GOOGLE SHEETS -->
+  <!-- PENGUMUMAN -->
   <section id="pengumuman" class="py-16 px-4 sm:px-8 max-w-7xl mx-auto">
     <div class="text-center mb-10">
       <h3 class="text-2xl sm:text-3xl font-bold text-red-950">Hebahan & Pengumuman</h3>
@@ -398,7 +398,7 @@
   <!-- ================= MODAL LOGIN ADMIN ================= -->
   <div id="login-modal" style="display: none;" class="fixed inset-0 bg-black/75 z-50 items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative">
-      <button id="close-login-btn" type="button" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg cursor-pointer">
+      <button type="button" onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg cursor-pointer">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
@@ -410,20 +410,20 @@
         <p class="text-xs text-gray-500">Panel kemas kini kandungan SEMEKAR</p>
       </div>
 
-      <form id="admin-login-form" class="space-y-4 text-xs" onsubmit="return false;">
+      <div class="space-y-4 text-xs">
         <div>
           <label class="block text-gray-700 font-semibold mb-1">Username</label>
-          <input type="text" id="login-username" class="w-full border rounded-lg p-2.5 focus:outline-none focus:border-red-900" placeholder="admin" required autocomplete="username" />
+          <input type="text" id="login-username" class="w-full border rounded-lg p-2.5 focus:outline-none focus:border-red-900" placeholder="admin" autocomplete="off" />
         </div>
         <div>
           <label class="block text-gray-700 font-semibold mb-1">Password</label>
-          <input type="password" id="login-password" class="w-full border rounded-lg p-2.5 focus:outline-none focus:border-red-900" placeholder="••••••••" required autocomplete="current-password" />
+          <input type="password" id="login-password" class="w-full border rounded-lg p-2.5 focus:outline-none focus:border-red-900" placeholder="••••••••" autocomplete="off" />
         </div>
         <p id="login-error" class="text-red-600 text-xs font-medium" style="display: none;">Username atau kata laluan tidak sah.</p>
-        <button id="submit-login-btn" type="button" class="w-full bg-red-950 hover:bg-red-900 text-white font-bold py-2.5 rounded-lg transition cursor-pointer">
+        <button id="submit-login-btn" type="button" onclick="executeLogin()" class="w-full bg-red-950 hover:bg-red-900 text-white font-bold py-2.5 rounded-lg transition cursor-pointer">
           Log Masuk
         </button>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -436,105 +436,224 @@
           <h3 class="text-base font-bold text-gray-900">Panel Kemas Kini Kandungan Sekolah</h3>
         </div>
         <div class="flex items-center space-x-2">
-          <button id="logout-btn" type="button" class="text-xs text-red-600 hover:underline font-bold mr-3 cursor-pointer">Log Keluar</button>
-          <button id="close-panel-btn" type="button" class="text-gray-400 hover:text-gray-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+          <button type="button" onclick="logoutAdmin()" class="text-xs text-red-600 hover:underline font-bold mr-3 cursor-pointer">Log Keluar</button>
+          <button type="button" onclick="closeAdminPanel()" class="text-gray-400 hover:text-gray-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
         </div>
       </div>
 
       <!-- Tab Buttons -->
       <div class="flex border-b border-gray-200 text-xs mb-4">
-        <button type="button" id="btn-tab-pengumuman" class="py-2 px-4 font-bold border-b-2 border-red-900 text-red-900 cursor-pointer">
+        <button type="button" id="btn-tab-pengumuman" onclick="switchAdminTab('tab-pengumuman')" class="py-2 px-4 font-bold border-b-2 border-red-900 text-red-900 cursor-pointer">
           + Pengumuman
         </button>
-        <button type="button" id="btn-tab-takwim" class="py-2 px-4 font-semibold text-gray-500 hover:text-red-900 cursor-pointer">
+        <button type="button" id="btn-tab-takwim" onclick="switchAdminTab('tab-takwim')" class="py-2 px-4 font-semibold text-gray-500 hover:text-red-900 cursor-pointer">
           + Takwim
         </button>
-        <button type="button" id="btn-tab-guru" class="py-2 px-4 font-semibold text-gray-500 hover:text-red-900 cursor-pointer">
+        <button type="button" id="btn-tab-guru" onclick="switchAdminTab('tab-guru')" class="py-2 px-4 font-semibold text-gray-500 hover:text-red-900 cursor-pointer">
           + Guru & Kakitangan
         </button>
       </div>
 
       <!-- Tab 1: Form Pengumuman -->
-      <form id="form-add-pengumuman" class="space-y-3 text-xs" onsubmit="return false;">
+      <div id="form-add-pengumuman" class="space-y-3 text-xs">
         <div>
           <label class="block font-semibold mb-1">Tajuk Pengumuman</label>
-          <input type="text" id="ann-title" class="w-full border p-2 rounded" placeholder="Contoh: Majlis Permuafakatan SPM" required />
+          <input type="text" id="ann-title" class="w-full border p-2 rounded" placeholder="Contoh: Majlis Permuafakatan SPM" />
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-semibold mb-1">Tarikh</label>
-            <input type="text" id="ann-date" class="w-full border p-2 rounded" placeholder="Contoh: 15 Mac 2026" required />
+            <input type="text" id="ann-date" class="w-full border p-2 rounded" placeholder="Contoh: 15 Mac 2026" />
           </div>
           <div>
             <label class="block font-semibold mb-1">Kategori</label>
-            <input type="text" id="ann-cat" class="w-full border p-2 rounded" placeholder="Penting / HEM / Kokurikulum" required />
+            <input type="text" id="ann-cat" class="w-full border p-2 rounded" placeholder="Penting / HEM / Kokurikulum" />
           </div>
         </div>
         <div>
           <label class="block font-semibold mb-1">Kandungan Ringkas</label>
-          <textarea id="ann-desc" rows="3" class="w-full border p-2 rounded" placeholder="Huraian hebahan..." required></textarea>
+          <textarea id="ann-desc" rows="3" class="w-full border p-2 rounded" placeholder="Huraian hebahan..."></textarea>
         </div>
-        <button type="button" id="btn-submit-ann" class="bg-red-950 text-white px-4 py-2 rounded font-bold hover:bg-red-900 transition cursor-pointer">
+        <button type="button" id="btn-submit-ann" onclick="submitNewPengumuman()" class="bg-red-950 text-white px-4 py-2 rounded font-bold hover:bg-red-900 transition cursor-pointer">
           Simpan ke Google Sheet
         </button>
-      </form>
+      </div>
 
       <!-- Tab 2: Form Takwim -->
-      <form id="form-add-takwim" class="space-y-3 text-xs" style="display: none;" onsubmit="return false;">
+      <div id="form-add-takwim" class="space-y-3 text-xs" style="display: none;">
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-semibold mb-1">Tarikh / Tempoh</label>
-            <input type="text" id="takwim-date" class="w-full border p-2 rounded" placeholder="Contoh: 20.05.2026" required />
+            <input type="text" id="takwim-date" class="w-full border p-2 rounded" placeholder="Contoh: 20.05.2026" />
           </div>
           <div>
             <label class="block font-semibold mb-1">Kategori</label>
-            <input type="text" id="takwim-cat" class="w-full border p-2 rounded" placeholder="Kurikulum / Kokurikulum / HEM" required />
+            <input type="text" id="takwim-cat" class="w-full border p-2 rounded" placeholder="Kurikulum / Kokurikulum / HEM" />
           </div>
         </div>
         <div>
           <label class="block font-semibold mb-1">Aktiviti / Acara</label>
-          <input type="text" id="takwim-act" class="w-full border p-2 rounded" placeholder="Contoh: Kejohanan Merentas Desa" required />
+          <input type="text" id="takwim-act" class="w-full border p-2 rounded" placeholder="Contoh: Kejohanan Merentas Desa" />
         </div>
         <div>
           <label class="block font-semibold mb-1">Tindakan / Sasaran</label>
-          <input type="text" id="takwim-action" class="w-full border p-2 rounded" placeholder="Contoh: Unit Kokurikulum" required />
+          <input type="text" id="takwim-action" class="w-full border p-2 rounded" placeholder="Contoh: Unit Kokurikulum" />
         </div>
-        <button type="button" id="btn-submit-takwim" class="bg-red-950 text-white px-4 py-2 rounded font-bold hover:bg-red-900 transition cursor-pointer">
+        <button type="button" id="btn-submit-takwim" onclick="submitNewTakwim()" class="bg-red-950 text-white px-4 py-2 rounded font-bold hover:bg-red-900 transition cursor-pointer">
           Simpan ke Google Sheet
         </button>
-      </form>
+      </div>
 
       <!-- Tab 3: Form Guru -->
-      <form id="form-add-guru" class="space-y-3 text-xs" style="display: none;" onsubmit="return false;">
+      <div id="form-add-guru" class="space-y-3 text-xs" style="display: none;">
         <div class="grid grid-cols-3 gap-3">
           <div>
             <label class="block font-semibold mb-1">Bil / No.</label>
-            <input type="number" id="guru-no" class="w-full border p-2 rounded" placeholder="31" required />
+            <input type="number" id="guru-no" class="w-full border p-2 rounded" placeholder="31" />
           </div>
           <div class="col-span-2">
             <label class="block font-semibold mb-1">Nama Penuh</label>
-            <input type="text" id="guru-nama" class="w-full border p-2 rounded" placeholder="Cikgu Ahmad bin Ali" required />
+            <input type="text" id="guru-nama" class="w-full border p-2 rounded" placeholder="Cikgu Ahmad bin Ali" />
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-semibold mb-1">Jawatan / Panitia</label>
-            <input type="text" id="guru-jawatan" class="w-full border p-2 rounded" placeholder="KP Sains / Guru Penolong" required />
+            <input type="text" id="guru-jawatan" class="w-full border p-2 rounded" placeholder="KP Sains / Guru Penolong" />
           </div>
           <div>
             <label class="block font-semibold mb-1">Gred</label>
-            <input type="text" id="guru-gred" class="w-full border p-2 rounded" placeholder="DG9 / DG10 / DG12" required />
+            <input type="text" id="guru-gred" class="w-full border p-2 rounded" placeholder="DG9 / DG10 / DG12" />
           </div>
         </div>
-        <button type="button" id="btn-submit-guru" class="bg-red-950 text-white px-4 py-2 rounded font-bold hover:bg-red-900 transition cursor-pointer">
+        <button type="button" id="btn-submit-guru" onclick="submitNewGuru()" class="bg-red-950 text-white px-4 py-2 rounded font-bold hover:bg-red-900 transition cursor-pointer">
           Simpan ke Google Sheet
         </button>
-      </form>
+      </div>
 
       <div id="admin-action-status" class="mt-4 text-xs font-semibold hidden"></div>
     </div>
   </div>
 
-  <script src="app.js?v=2026.3"></script>
+  <!-- INLINE CORE SCRIPT (PENGESAHAN & KAWALAN MODAL) -->
+  <script>
+    const ADMIN_USER = "admin";
+    const ADMIN_PASS = "semekar@123";
+
+    function openLoginModal() {
+      const modal = document.getElementById("login-modal");
+      const err = document.getElementById("login-error");
+      if (modal) modal.style.display = "flex";
+      if (err) err.style.display = "none";
+    }
+
+    function closeLoginModal() {
+      const modal = document.getElementById("login-modal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function openAdminPanel() {
+      const panel = document.getElementById("admin-panel-modal");
+      if (panel) panel.style.display = "flex";
+    }
+
+    function closeAdminPanel() {
+      const panel = document.getElementById("admin-panel-modal");
+      if (panel) panel.style.display = "none";
+    }
+
+    function executeLogin() {
+      const userInput = document.getElementById("login-username");
+      const passInput = document.getElementById("login-password");
+      const err = document.getElementById("login-error");
+
+      const u = userInput ? userInput.value.trim().toLowerCase() : "";
+      const p = passInput ? passInput.value.trim() : "";
+
+      if (u === ADMIN_USER && p === ADMIN_PASS) {
+        try {
+          sessionStorage.setItem("semekar_admin", "true");
+        } catch (e) {
+          console.warn("Storage restricted", e);
+        }
+        closeLoginModal();
+        updateAdminStatusUI();
+        openAdminPanel();
+        if (userInput) userInput.value = "";
+        if (passInput) passInput.value = "";
+        if (err) err.style.display = "none";
+      } else {
+        if (err) {
+          err.style.display = "block";
+          err.textContent = "Username atau kata laluan tidak sah.";
+        }
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem("semekar_admin");
+      closeAdminPanel();
+      updateAdminStatusUI();
+    }
+
+    function updateAdminStatusUI() {
+      const isAdmin = sessionStorage.getItem("semekar_admin") === "true";
+      const btnAdmin = document.getElementById("admin-panel-btn");
+      const navLoginBtn = document.getElementById("nav-login-btn");
+
+      if (isAdmin) {
+        if (btnAdmin) btnAdmin.classList.remove("hidden");
+        if (navLoginBtn) {
+          navLoginBtn.innerHTML = '<i class="fa-solid fa-user-check mr-1"></i> Admin Aktif';
+          navLoginBtn.onclick = openAdminPanel;
+        }
+      } else {
+        if (btnAdmin) btnAdmin.classList.add("hidden");
+        if (navLoginBtn) {
+          navLoginBtn.innerHTML = '<i class="fa-solid fa-lock mr-1"></i> Admin Login';
+          navLoginBtn.onclick = openLoginModal;
+        }
+      }
+    }
+
+    function switchAdminTab(tabId) {
+      const tabs = ["tab-pengumuman", "tab-takwim", "tab-guru"];
+      const forms = ["form-add-pengumuman", "form-add-takwim", "form-add-guru"];
+
+      tabs.forEach((t, i) => {
+        const btn = document.getElementById("btn-" + t);
+        const form = document.getElementById(forms[i]);
+
+        if (btn && form) {
+          if (t === tabId) {
+            btn.className = "py-2 px-4 font-bold border-b-2 border-red-900 text-red-900 cursor-pointer";
+            form.style.display = "block";
+          } else {
+            btn.className = "py-2 px-4 font-semibold text-gray-500 hover:text-red-900 cursor-pointer";
+            form.style.display = "none";
+          }
+        }
+      });
+      const statusEl = document.getElementById("admin-action-status");
+      if (statusEl) statusEl.classList.add("hidden");
+    }
+
+    function toggleMobileMenu() {
+      const m = document.getElementById("mobile-menu");
+      if (m) m.classList.toggle("hidden");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateAdminStatusUI();
+      const pass = document.getElementById("login-password");
+      if (pass) {
+        pass.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") executeLogin();
+        });
+      }
+    });
+  </script>
+
+  <script src="app.js?v=2026.4"></script>
 </body>
 </html>
