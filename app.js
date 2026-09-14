@@ -5,38 +5,38 @@
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJsneV6VGEqRbGnxHr1mpXpv2ihZUYcwSM6BFQvymaw36kIyZ1c3yhSw/exec";
 
-// Data Sandaran Sesi 2026
+// Data Sandaran Sesi 2026 (Nama Terkini & Tanpa Gred)
 const FALLBACK_TEACHERS = [
-  { no: 1, nama: "En. Abd Hadi bin Adman", jawatan: "Pengetua", gred: "DG13" },
-  { no: 2, nama: "En. Masnon bin Amat", jawatan: "GPK Pentadbiran", gred: "DG12" },
-  { no: 3, nama: "Pn. Shamsinah binti Shamsudin", jawatan: "GPK Hal Ehwal Murid", gred: "DG14" },
-  { no: 4, nama: "En. Mohd Zainal bin Mohd Zabir", jawatan: "GPK Kokurikulum", gred: "DG12" },
-  { no: 5, nama: "En. Mohd Nizam bin Subani", jawatan: "GKMP Teknik & Vokasional", gred: "DG12" },
-  { no: 6, nama: "Pn. Rohana binti Jasmin", jawatan: "GKMP Bahasa", gred: "DG12" },
-  { no: 7, nama: "En. XY", jawatan: "GKMP Sains Kemasyarakatan", gred: "DG12" },
-  { no: 8, nama: "En. Mohd Riduwan bin Mohd Yasan", jawatan: "GKMP Sains & Matematik", gred: "DG12" },
-  { no: 9, nama: "Pn. Norul Hafidzah binti Hassan", jawatan: "Guru Kaunseling (GBK)", gred: "DG10" },
-  { no: 10, nama: "Cik Vasugi A/P Sinniah", jawatan: "Guru Penolong", gred: "DG13" },
-  { no: 11, nama: "Hjh Norhayati bt. Md Zain", jawatan: "Guru Penolong / S/U HEM", gred: "DG12" },
-  { no: 12, nama: "Pn. Zaimah binti Samad", jawatan: "Guru Perpustakaan & Media (GPM)", gred: "DG12" },
-  { no: 13, nama: "Pn. Tanty binti Ramli", jawatan: "Guru Penolong", gred: "DG12" },
-  { no: 14, nama: "En. Zainal bin Mohamad Zain", jawatan: "Guru Penolong / S/U Peperiksaan", gred: "DG12" },
-  { no: 15, nama: "Pn. Siti Norhafizah binti Mohd Safie", jawatan: "Guru Penolong / KP Seni Visual", gred: "DG10" },
-  { no: 16, nama: "Pn. Norihan binti Yusof", jawatan: "Guru Penolong / KP Tasawwur", gred: "DG12" },
-  { no: 17, nama: "Pn. Tan Bee Kean", jawatan: "Guru Penolong / KP Bahasa Cina", gred: "DG10" },
-  { no: 18, nama: "Cik Norfaizah binti Ismail", jawatan: "Guru ICT & Data", gred: "DG10" },
-  { no: 19, nama: "Pn. Jessica Chan Lai Peng", jawatan: "Guru Penolong / S/U Kokurikulum", gred: "DG12" },
-  { no: 20, nama: "Cik Lavanya A/P Vejayan", jawatan: "Guru Penolong / S/U Kurikulum", gred: "DG9" },
-  { no: 21, nama: "Pn. Siti Nur Hakimah binti Mohd Noor", jawatan: "Guru Penolong / SPBT", gred: "DG9" },
-  { no: 22, nama: "Pn. Norhamizah binti Shafie", jawatan: "Guru Penolong / KP BM", gred: "DG10" },
-  { no: 23, nama: "Pn. Nurul Hamizah binti Md Said", jawatan: "Guru Penolong", gred: "DG9" },
-  { no: 24, nama: "Pn. Tamilvani A/P Krishnan", jawatan: "Guru Penolong", gred: "DG9" },
-  { no: 25, nama: "En. Muhammad Syadza bin Yusof", jawatan: "Guru Penolong", gred: "DG9" },
-  { no: 26, nama: "En. Muhammad Amirul Aiman bin Zakaria", jawatan: "Guru Penolong / S/U Sukan", gred: "DG9" },
-  { no: 27, nama: "Cik Nur Aina Najwa binti Mohd Nor", jawatan: "Guru Penolong", gred: "DG9" },
-  { no: 28, nama: "Cik Nur Fatin Nazirah binti Rashidi", jawatan: "Guru Penolong", gred: "DG9" },
-  { no: 29, nama: "Cik Siti Haniza binti Imran", jawatan: "Guru Penolong", gred: "DG9" },
-  { no: 30, nama: "Pn. Zarina Meriam binti Othman", jawatan: "Pembantu Tadbir (Kewangan)", gred: "N2" }
+  { no: 1, nama: "En. Abd Hadi bin Adman", jawatan: "Pengetua" },
+  { no: 2, nama: "En. Masnon bin Amat", jawatan: "GPK Pentadbiran" },
+  { no: 3, nama: "Pn. Oskasmazila binti Osman", jawatan: "GPK Hal Ehwal Murid" },
+  { no: 4, nama: "En. Mohd Zainal bin Mohd Zabir", jawatan: "GPK Kokurikulum" },
+  { no: 5, nama: "En. Mohd Nizam bin Subani", jawatan: "GKMP Teknik & Vokasional" },
+  { no: 6, nama: "Pn. Rohana binti Jasmin", jawatan: "GKMP Bahasa" },
+  { no: 7, nama: "En. Mohamaad Fadzeli bin Azam", jawatan: "GKMP Sains Kemasyarakatan" },
+  { no: 8, nama: "En. Mohd Riduwan bin Mohd Yasan", jawatan: "GKMP Sains & Matematik" },
+  { no: 9, nama: "Pn. Norul Hafidzah binti Hassan", jawatan: "Guru Kaunseling (GBK)" },
+  { no: 10, nama: "Cik Vasugi A/P Sinniah", jawatan: "Guru Penolong" },
+  { no: 11, nama: "Hjh Norhayati bt. Md Zain", jawatan: "Guru Penolong / S/U HEM" },
+  { no: 12, nama: "Pn. Zaimah binti Samad", jawatan: "Guru Perpustakaan & Media (GPM)" },
+  { no: 13, nama: "Pn. Tanty binti Ramli", jawatan: "Guru Penolong" },
+  { no: 14, nama: "En. Zainal bin Mohamad Zain", jawatan: "Guru Penolong / S/U Peperiksaan" },
+  { no: 15, nama: "Pn. Siti Norhafizah binti Mohd Safie", jawatan: "Guru Penolong / KP Seni Visual" },
+  { no: 16, nama: "Pn. Norihan binti Yusof", jawatan: "Guru Penolong / KP Tasawwur" },
+  { no: 17, nama: "Pn. Tan Bee Kean", jawatan: "Guru Penolong / KP Bahasa Cina" },
+  { no: 18, nama: "Cik Norfaizah binti Ismail", jawatan: "Guru ICT & Data" },
+  { no: 19, nama: "Pn. Jessica Chan Lai Peng", jawatan: "Guru Penolong / S/U Kokurikulum" },
+  { no: 20, nama: "Cik Lavanya A/P Vejayan", jawatan: "Guru Penolong / S/U Kurikulum" },
+  { no: 21, nama: "Pn. Siti Nur Hakimah binti Mohd Noor", jawatan: "Guru Penolong / SPBT" },
+  { no: 22, nama: "Pn. Norhamizah binti Shafie", jawatan: "Guru Penolong / KP BM" },
+  { no: 23, nama: "Pn. Nurul Hamizah binti Md Said", jawatan: "Guru Penolong" },
+  { no: 24, nama: "Pn. Tamilvani A/P Krishnan", jawatan: "Guru Penolong" },
+  { no: 25, nama: "En. Muhammad Syadza bin Yusof", jawatan: "Guru Penolong" },
+  { no: 26, nama: "En. Muhammad Amirul Aiman bin Zakaria", jawatan: "Guru Penolong / S/U Sukan" },
+  { no: 27, nama: "Cik Nur Aina Najwa binti Mohd Nor", jawatan: "Guru Penolong" },
+  { no: 28, nama: "Cik Nur Fatin Nazirah binti Rashidi", jawatan: "Guru Penolong" },
+  { no: 29, nama: "Cik Siti Haniza binti Imran", jawatan: "Guru Penolong" },
+  { no: 30, nama: "Pn. Zarina Meriam binti Othman", jawatan: "Pembantu Tadbir (Kewangan)" }
 ];
 
 const FALLBACK_ANNOUNCEMENTS = [
@@ -70,7 +70,7 @@ const FALLBACK_TAKWIM = [
 
 let allTeachersData = [...FALLBACK_TEACHERS];
 
-// =================== PENGHANTARAN POST KE APPS SCRIPT ===================
+// =================== POST DATA KE GOOGLE SHEET ===================
 async function postDataToScript(action, data, submitBtnId) {
   const statusEl = document.getElementById("admin-action-status");
   const btn = document.getElementById(submitBtnId);
@@ -83,7 +83,7 @@ async function postDataToScript(action, data, submitBtnId) {
 
   if (statusEl) {
     statusEl.className = "mt-4 text-xs font-semibold text-blue-600 block";
-    statusEl.textContent = "Menghantar data ke Google Sheet...";
+    statusEl.textContent = "Menghantar maklumat ke Google Sheet...";
     statusEl.classList.remove("hidden");
   }
 
@@ -98,7 +98,7 @@ async function postDataToScript(action, data, submitBtnId) {
     if (result.status === "success") {
       if (statusEl) {
         statusEl.className = "mt-4 text-xs font-semibold text-emerald-600 block";
-        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Rekod berjaya disimpan ke Google Sheet!`;
+        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Maklumat berjaya disimpan ke Google Sheet!`;
       }
       fetchGoogleData();
     } else {
@@ -159,8 +159,7 @@ function submitNewGuru() {
   const payload = {
     no: document.getElementById("guru-no").value.trim(),
     nama: document.getElementById("guru-nama").value.trim(),
-    jawatan: document.getElementById("guru-jawatan").value.trim(),
-    gred: document.getElementById("guru-gred").value.trim()
+    jawatan: document.getElementById("guru-jawatan").value.trim()
   };
   if (!payload.nama || !payload.jawatan) {
     alert("Sila isi nama dan jawatan guru.");
@@ -170,7 +169,6 @@ function submitNewGuru() {
     document.getElementById("guru-no").value = "";
     document.getElementById("guru-nama").value = "";
     document.getElementById("guru-jawatan").value = "";
-    document.getElementById("guru-gred").value = "";
   });
 }
 
@@ -181,7 +179,7 @@ async function fetchGoogleData() {
 
   try {
     const res = await fetch(APPS_SCRIPT_URL);
-    if (!res.ok) throw new Error("Sambungan gagal");
+    if (!res.ok) throw new Error("Sambungan pelayan gagal");
 
     const data = await res.json();
     if (data.status === "success") {
@@ -235,7 +233,6 @@ function renderTeachers(teachers) {
       <td class="p-3 font-medium text-gray-500">${t.no || idx + 1}</td>
       <td class="p-3 font-semibold text-gray-900">${t.nama || "-"}</td>
       <td class="p-3 text-red-900 font-medium">${t.jawatan || "-"}</td>
-      <td class="p-3"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[11px] font-medium border border-gray-200">${t.gred || "-"}</span></td>
     </tr>
   `).join("");
 }
@@ -260,8 +257,7 @@ function setupSearch() {
     const val = e.target.value.toLowerCase().trim();
     const filtered = allTeachersData.filter(t => 
       (t.nama && t.nama.toLowerCase().includes(val)) || 
-      (t.jawatan && t.jawatan.toLowerCase().includes(val)) ||
-      (t.gred && t.gred.toLowerCase().includes(val))
+      (t.jawatan && t.jawatan.toLowerCase().includes(val))
     );
     renderTeachers(filtered);
   });
