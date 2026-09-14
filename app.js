@@ -69,17 +69,15 @@ const FALLBACK_TEACHERS = [
   { no: 30, nama: "Pn. Zarina Meriam binti Othman", jawatan: "Pembantu Tadbir (Kewangan)" }
 ];
 
-const FALLBACK_ANNOUNCEMENTS = [
-  {
-    tajuk: "Sedang memuatkan data..",
-    tarikh: "Sedang memuatkan data..",
-    kategori: "Sila tunggu",
-    kandungan: "Sedang memuatkan data.."
-  }
-];
+// Dikosongkan sepenuhnya (tiada lagi pengumuman lama)
+const FALLBACK_ANNOUNCEMENTS = [];
 
 const FALLBACK_TAKWIM = [
-  { tarikh: "sedang memuatkan..", aktiviti: "Sedang memuatkan..", kategori: "Sila tunggu", tindakan: "Sila tunggu" }
+  { tarikh: "12.01.2026", aktiviti: "Hari Pertama Persekolahan Sesi 2026", kategori: "Pengurusan", tindakan: "Semua Guru" },
+  { tarikh: "15.01.2026", aktiviti: "Kejohanan Merentas Desa Sekolah", kategori: "Kokurikulum", tindakan: "Unit Kokurikulum" },
+  { tarikh: "13.02.2026", aktiviti: "Kejohanan Sukan Tahunan Ke-27", kategori: "Kokurikulum", tindakan: "Majlis Sukan" },
+  { tarikh: "21.03.2026 - 29.03.2026", aktiviti: "Cuti Penggal 1 & Hari Raya Aidilfitri", kategori: "Cuti", tindakan: "Semua Murid" },
+  { tarikh: "04.05.2026", aktiviti: "Peperiksaan Pertengahan Tahun Bermula", kategori: "Kurikulum", tindakan: "S/U Peperiksaan" }
 ];
 
 let allTeachersData = [...FALLBACK_TEACHERS];
@@ -91,26 +89,20 @@ try {
   }
 } catch (e) {}
 
-// =================== FUNGSI FORMAT TARIKH KESELAMATAN (FRONTEND) ===================
 function formatTarikhMalaysia(tarikhStr) {
   if (!tarikhStr) return "-";
-  
-  // Jika masih ada kod ISO (t, z) yang lolos, bersihkan di sini
-  if (String(tarikhStr).includes("T") || String(tarikhStr).includes("Z")) {
-    const d = new Date(tarikhStr);
-    if (!isNaN(d.getTime())) {
-      return d.toLocaleDateString('ms-MY', {
-        timeZone: 'Asia/Kuala_Lumpur',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-    }
+  const d = new Date(tarikhStr);
+  if (!isNaN(d.getTime()) && (String(tarikhStr).includes("T") || String(tarikhStr).includes("Z"))) {
+    return d.toLocaleDateString('ms-MY', {
+      timeZone: 'Asia/Kuala_Lumpur',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
   }
   return tarikhStr;
 }
 
-// =================== PAPARAN PENGURUSAN ===================
 function renderPentadbirUI() {
   const roles = ["pengetua", "gpk1", "gpkhem", "gpkkoku"];
   roles.forEach(role => {
@@ -161,7 +153,6 @@ function renderGkmpUI() {
   });
 }
 
-// Handler Borang Pentadbir
 function onPentadbirRoleSelect() {
   const roleSelect = document.getElementById("pentadbir-role");
   const nameInput = document.getElementById("pentadbir-name");
@@ -228,7 +219,6 @@ function submitPentadbirUpdate() {
   });
 }
 
-// Handler Borang GKMP
 function onGkmpRoleSelect() {
   const roleSelect = document.getElementById("gkmp-role");
   const nameInput = document.getElementById("gkmp-name");
@@ -295,7 +285,6 @@ function submitGkmpUpdate() {
   });
 }
 
-// =================== JADUAL GURU ===================
 function renderTeachers(teachers) {
   const tbody = document.getElementById("teachers-table-body");
   if (!tbody) return;
@@ -320,7 +309,7 @@ function renderTeachers(teachers) {
   }).join("");
 }
 
-// =================== PENGUMUMAN (DENGAN SYARAT BILANGAN & TARIKH) ===================
+// Render Pengumuman mengikut syarat jumlah (1 di tengah, 2 sebelah-menyebelah, 3+ grid kiri)
 function renderAnnouncements(items) {
   const c = document.getElementById("announcement-container");
   if (!c) return;
@@ -337,10 +326,6 @@ function renderAnnouncements(items) {
 
   const count = items.length;
 
-  // Syarat susunan mengikut bilangan:
-  // 1 = Tengah
-  // 2 = Sebelah-menyebelah di tengah
-  // 3 atau lebih = Grid biasa (terkini di kiri)
   if (count === 1) {
     c.className = "flex justify-center";
   } else if (count === 2) {
@@ -381,7 +366,6 @@ function renderTakwim(events) {
   `).join("");
 }
 
-// =================== AMBIL DATA (GET) ===================
 async function fetchGoogleData() {
   const statusEl = document.getElementById("cms-status");
   const lastUpdatedEl = document.getElementById("last-updated");
@@ -392,7 +376,6 @@ async function fetchGoogleData() {
 
     const data = await res.json();
     if (data.status === "success") {
-      // Pentadbir
       if (data.pentadbir && Array.isArray(data.pentadbir) && data.pentadbir.length > 0) {
         data.pentadbir.forEach(p => {
           if (p.id && pentadbirData[p.id]) {
@@ -404,7 +387,6 @@ async function fetchGoogleData() {
         renderPentadbirUI();
       }
 
-      // GKMP
       if (data.gkmp && Array.isArray(data.gkmp) && data.gkmp.length > 0) {
         data.gkmp.forEach(g => {
           if (g.id && gkmpData[g.id]) {
@@ -416,7 +398,7 @@ async function fetchGoogleData() {
         renderGkmpUI();
       }
 
-      if (data.pengumuman && data.pengumuman.length > 0) {
+      if (data.pengumuman) {
         renderAnnouncements(data.pengumuman);
       }
 
@@ -453,7 +435,6 @@ async function fetchGoogleData() {
   }
 }
 
-// =================== POST DATA ===================
 async function postDataToScript(action, data, submitBtnId) {
   const statusEl = document.getElementById("admin-action-status");
   const btn = document.getElementById(submitBtnId);
