@@ -1,12 +1,11 @@
 /**
  * SEMEKAR Web App Engine
- * Berhubung dengan Google Sheets API / Google Apps Script
+ * URL Endpoint: Google Apps Script Web App
  */
 
-// GANTIKAN DENGAN URL GOOGLE APPS SCRIPT ANDA SELEPAS DEPLOYMENT:
-const APPS_SCRIPT_URL = "MASUKKAN_URL_WEB_APP_GOOGLE_SCRIPT_ANDA_DI_SINI";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJsneV6VGEqRbGnxHr1mpXpv2ihZUYcwSM6BFQvymaw36kIyZ1c3yhSw/exec";
 
-// Data asal (Fallback Data) daripada Buku Pengurusan 2026 sekiranya Google Sheets belum dikonfigurasikan
+// Data sandaran Buku Pengurusan 2026 sekiranya sheet kosong atau sambungan tergendala
 const FALLBACK_TEACHERS = [
   { no: 1, nama: "En. Abd Hadi bin Adman", jawatan: "Pengetua", gred: "DG13" },
   { no: 2, nama: "En. Masnon bin Amat", jawatan: "GPK Pentadbiran", gred: "DG12" },
@@ -55,9 +54,9 @@ const FALLBACK_ANNOUNCEMENTS = [
   },
   {
     tajuk: "Program Transformasi Sekolah (TS25) & Peluasan KBAT",
-    tarikh: "Sepanjang Sesi 2026",
+    tarikh: "Sesi 2026",
     kategori: "Akademik",
-    kandungan: "Pembudayaan PAK21, Kemahiran Berfikir Aras Tinggi (KBAT), dan aplikasi amalan PdPc terbaik bagi melonjakkan kemenjadian murid."
+    kandungan: "Pembudayaan amalan PAK21 dan Kemahiran Berfikir Aras Tinggi (KBAT) ke arah kecemerlangan kemenjadian murid."
   }
 ];
 
@@ -65,20 +64,18 @@ const FALLBACK_TAKWIM = [
   { tarikh: "12.01.2026", aktiviti: "Hari Pertama Persekolahan Sesi 2026", kategori: "Pengurusan", tindakan: "Semua Guru" },
   { tarikh: "15.01.2026", aktiviti: "Kejohanan Merentas Desa Sekolah", kategori: "Kokurikulum", tindakan: "Unit Kokurikulum" },
   { tarikh: "13.02.2026", aktiviti: "Kejohanan Sukan Tahunan Ke-27", kategori: "Kokurikulum", tindakan: "Majlis Sukan" },
-  { tarikh: "21.03.2026 - 29.03.2026", aktiviti: "Cuti Penggal 1 & Hari Raya Aidilfitri", kategori: "Cuti Persekolahan", tindakan: "Semua Murid" },
+  { tarikh: "21.03.2026 - 29.03.2026", aktiviti: "Cuti Penggal 1 & Hari Raya Aidilfitri", kategori: "Cuti", tindakan: "Semua Murid" },
   { tarikh: "04.05.2026", aktiviti: "Peperiksaan Pertengahan Tahun Bermula", kategori: "Kurikulum", tindakan: "S/U Peperiksaan" }
 ];
 
 let allTeachersData = [...FALLBACK_TEACHERS];
 
-// Init Application
 document.addEventListener("DOMContentLoaded", () => {
   setupMobileMenu();
   setupSearch();
   fetchGoogleData();
 });
 
-// Mobile menu toggle
 function setupMobileMenu() {
   const btn = document.getElementById("mobile-menu-btn");
   const menu = document.getElementById("mobile-menu");
@@ -87,52 +84,61 @@ function setupMobileMenu() {
   }
 }
 
-// Ambil data Google Apps Script
 async function fetchGoogleData() {
   const statusEl = document.getElementById("cms-status");
-
-  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes("MASUKKAN_URL")) {
-    console.log("Menggunakan fallback data (Google Apps Script URL belum dimasukkan).");
-    renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
-    renderTeachers(FALLBACK_TEACHERS);
-    renderTakwim(FALLBACK_TAKWIM);
-    if (statusEl) statusEl.innerHTML = "<span class='text-amber-600'>Mod Prasiap: Menggunakan data asas 2026 (Hubungkan Google Sheets untuk Live Update)</span>";
-    return;
-  }
+  const lastUpdatedEl = document.getElementById("last-updated");
 
   try {
     const res = await fetch(APPS_SCRIPT_URL);
+    if (!res.ok) throw new Error("Respons rangkaian tidak sah");
+    
     const data = await res.json();
 
-    if (data.pengumuman && data.pengumuman.length > 0) {
-      renderAnnouncements(data.pengumuman);
-    } else {
-      renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
-    }
+    if (data.status === "success") {
+      // 1. Render Pengumuman
+      if (data.pengumuman && data.pengumuman.length > 0) {
+        renderAnnouncements(data.pengumuman);
+      } else {
+        renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
+      }
 
-    if (data.guru && data.guru.length > 0) {
-      allTeachersData = data.guru;
-      renderTeachers(data.guru);
-    } else {
-      renderTeachers(FALLBACK_TEACHERS);
-    }
+      // 2. Render Guru
+      if (data.guru && data.guru.length > 0) {
+        allTeachersData = data.guru;
+        renderTeachers(data.guru);
+      } else {
+        renderTeachers(FALLBACK_TEACHERS);
+      }
 
-    if (data.takwim && data.takwim.length > 0) {
-      renderTakwim(data.takwim);
-    } else {
-      renderTakwim(FALLBACK_TAKWIM);
-    }
+      // 3. Render Takwim
+      if (data.takwim && data.takwim.length > 0) {
+        renderTakwim(data.takwim);
+      } else {
+        renderTakwim(FALLBACK_TAKWIM);
+      }
 
-    if (statusEl) statusEl.innerHTML = "<span class='text-emerald-600 font-bold'><i class='fa-solid fa-circle-check'></i> Disegerakkan secara Live dari Google Sheets</span>";
+      if (statusEl) {
+        statusEl.innerHTML = `<span class='text-emerald-700 font-semibold'><i class='fa-solid fa-circle-check text-emerald-500 mr-1'></i> Diselaraskan terus dari Google Sheets</span>`;
+      }
+      if (lastUpdatedEl) {
+        const d = new Date();
+        lastUpdatedEl.textContent = `Disemak: ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      }
+    } else {
+      throw new Error(data.message || "Ralat memproses payload Google Sheets");
+    }
   } catch (err) {
-    console.warn("Gagal memuat turun data dari Google API, kembali ke data sokongan tempatan:", err);
+    console.warn("Gagal memuat data Google Sheets. Memaparkan data sandaran:", err);
     renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
     renderTeachers(FALLBACK_TEACHERS);
     renderTakwim(FALLBACK_TAKWIM);
+
+    if (statusEl) {
+      statusEl.innerHTML = `<span class='text-amber-700 font-semibold'><i class='fa-solid fa-triangle-exclamation text-amber-500 mr-1'></i> Mod Luar Talian: Memaparkan Data Sandaran 2026</span>`;
+    }
   }
 }
 
-// Papar Pengumuman
 function renderAnnouncements(items) {
   const container = document.getElementById("announcement-container");
   if (!container) return;
@@ -141,56 +147,54 @@ function renderAnnouncements(items) {
     <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-red-900 border-x border-b border-gray-100 flex flex-col justify-between hover:shadow-md transition">
       <div>
         <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
-          <span><i class="fa-regular fa-calendar mr-1"></i> ${item.tarikh || ""}</span>
-          <span class="bg-red-100 text-red-900 font-semibold px-2 py-0.5 rounded">${item.kategori || "Umum"}</span>
+          <span><i class="fa-regular fa-calendar mr-1"></i> ${item.tarikh || "-"}</span>
+          <span class="bg-red-100 text-red-900 font-semibold px-2 py-0.5 rounded">${item.kategori || "Hebahan"}</span>
         </div>
-        <h4 class="font-bold text-base text-gray-800 mb-2">${item.tajuk || ""}</h4>
+        <h4 class="font-bold text-base text-gray-800 mb-2">${item.tajuk || "Pengumuman"}</h4>
         <p class="text-xs text-gray-600 leading-relaxed">${item.kandungan || ""}</p>
       </div>
     </div>
   `).join("");
 }
 
-// Papar Senarai Guru
 function renderTeachers(teachers) {
   const tbody = document.getElementById("teachers-table-body");
   if (!tbody) return;
 
-  tbody.innerHTML = teachers.map(t => `
-    <tr class="hover:bg-red-50/50 transition">
-      <td class="p-3 font-medium">${t.no}</td>
-      <td class="p-3 font-semibold text-gray-900">${t.nama}</td>
-      <td class="p-3 text-red-900 font-medium">${t.jawatan}</td>
-      <td class="p-3"><span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-[11px]">${t.gred || "-"}</span></td>
+  tbody.innerHTML = teachers.map((t, idx) => `
+    <tr class="hover:bg-red-50/40 transition">
+      <td class="p-3 font-medium text-gray-500">${t.no || idx + 1}</td>
+      <td class="p-3 font-semibold text-gray-900">${t.nama || "-"}</td>
+      <td class="p-3 text-red-900 font-medium">${t.jawatan || "-"}</td>
+      <td class="p-3"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[11px] font-medium border border-gray-200">${t.gred || "-"}</span></td>
     </tr>
   `).join("");
 }
 
-// Papar Takwim
 function renderTakwim(events) {
   const tbody = document.getElementById("takwim-table-body");
   if (!tbody) return;
 
   tbody.innerHTML = events.map(e => `
     <tr class="hover:bg-gray-50 transition">
-      <td class="p-3 font-bold text-red-950">${e.tarikh}</td>
-      <td class="p-3 font-medium">${e.aktiviti}</td>
-      <td class="p-3"><span class="bg-yellow-100 text-yellow-900 font-semibold px-2 py-0.5 rounded text-[11px]">${e.kategori || "Aktiviti"}</span></td>
+      <td class="p-3 font-bold text-red-950 whitespace-nowrap">${e.tarikh || "-"}</td>
+      <td class="p-3 font-medium text-gray-800">${e.aktiviti || "-"}</td>
+      <td class="p-3"><span class="bg-yellow-100 text-yellow-900 font-semibold px-2 py-0.5 rounded text-[11px]">${e.kategori || "Program"}</span></td>
       <td class="p-3 text-gray-600">${e.tindakan || "-"}</td>
     </tr>
   `).join("");
 }
 
-// Carian Guru
 function setupSearch() {
   const searchInput = document.getElementById("teacher-search");
   if (!searchInput) return;
 
   searchInput.addEventListener("input", (e) => {
-    const val = e.target.value.toLowerCase();
+    const val = e.target.value.toLowerCase().trim();
     const filtered = allTeachersData.filter(t => 
-      t.nama.toLowerCase().includes(val) || 
-      t.jawatan.toLowerCase().includes(val)
+      (t.nama && t.nama.toLowerCase().includes(val)) || 
+      (t.jawatan && t.jawatan.toLowerCase().includes(val)) ||
+      (t.gred && t.gred.toLowerCase().includes(val))
     );
     renderTeachers(filtered);
   });
