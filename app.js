@@ -5,8 +5,30 @@
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJsneV6VGEqRbGnxHr1mpXpv2ihZUYcwSM6BFQvymaw36kIyZ1c3yhSw/exec";
 const CACHE_KEY_GURU = "semekar_guru_cache_v2";
+const CACHE_KEY_PENTADBIR = "semekar_pentadbir_cache_v2";
 
-// Senarai Asal 2026 (Nama Terkini & Tanpa Gred)
+// Data Asal Barisan Pentadbir 2026
+const DEFAULT_PENTADBIR = {
+  pengetua: { id: "pengetua", jawatan: "Pengetua", nama: "Cikgu Abd Hadi bin Adman", gambar: "" },
+  gpk1: { id: "gpk1", jawatan: "GPK Pentadbiran", nama: "Cikgu Masnon bin Amat", gambar: "" },
+  gpkhem: { id: "gpkhem", jawatan: "GPK Hal Ehwal Murid", nama: "Cikgu Oskasmazila binti Osman", gambar: "" },
+  gpkkoku: { id: "gpkkoku", jawatan: "GPK Kokurikulum", nama: "Cikgu Zainal bin Mohd Zabir", gambar: "" }
+};
+
+let pentadbirData = { ...DEFAULT_PENTADBIR };
+let currentSelectedImageBase64 = "";
+
+// Semak cache pentadbir
+try {
+  const cachedPentadbir = localStorage.getItem(CACHE_KEY_PENTADBIR);
+  if (cachedPentadbir) {
+    pentadbirData = JSON.parse(cachedPentadbir);
+  }
+} catch (e) {
+  console.warn("Storage restricted", e);
+}
+
+// Senarai Guru Asal 2026 (Tanpa Gred)
 const FALLBACK_TEACHERS = [
   { no: 1, nama: "En. Abd Hadi bin Adman", jawatan: "Pengetua" },
   { no: 2, nama: "En. Masnon bin Amat", jawatan: "GPK Pentadbiran" },
@@ -45,19 +67,19 @@ const FALLBACK_ANNOUNCEMENTS = [
     tajuk: "Pendaftaran Sesi Persekolahan 2026",
     tarikh: "10 Januari 2026",
     kategori: "Penting",
-    kandungan: "Pendaftaran Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 di Dewan Semekar Hebat."
+    kandungan: "Pendaftaran Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 di Dewan Semekar Hebat[cite: 1]."
   },
   {
     tajuk: "Kejohanan Olahraga Tahunan Kali Ke-27",
     tarikh: "13 Februari 2026",
     kategori: "Kokurikulum",
-    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput hadir memeriahkan kejohanan."
+    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput hadir memeriahkan kejohanan[cite: 1]."
   },
   {
     tajuk: "Program Transformasi Sekolah (TS25)",
     tarikh: "Sesi 2026",
     kategori: "Akademik",
-    kandungan: "Pembudayaan amalan PAK21 dan kemahiran berfikir aras tinggi (KBAT) untuk seluruh warga pelajar."
+    kandungan: "Pembudayaan amalan PAK21 dan kemahiran berfikir aras tinggi (KBAT) untuk seluruh warga pelajar[cite: 1]."
   }
 ];
 
@@ -69,36 +91,161 @@ const FALLBACK_TAKWIM = [
   { tarikh: "04.05.2026", aktiviti: "Peperiksaan Pertengahan Tahun Bermula", kategori: "Kurikulum", tindakan: "S/U Peperiksaan" }
 ];
 
-// Semak simpanan memori setempat (Local Cache)
 let allTeachersData = [...FALLBACK_TEACHERS];
 try {
-  const cached = localStorage.getItem(CACHE_KEY_GURU);
-  if (cached) {
-    const parsed = JSON.parse(cached);
-    if (Array.isArray(parsed) && parsed.length > 0) {
-      allTeachersData = parsed;
-    }
+  const cachedGuru = localStorage.getItem(CACHE_KEY_GURU);
+  if (cachedGuru) {
+    const parsed = JSON.parse(cachedGuru);
+    if (Array.isArray(parsed) && parsed.length > 0) allTeachersData = parsed;
   }
-} catch (e) {
-  console.warn("Storan tempatan dihadkan:", e);
+} catch (e) {}
+
+// =================== PAPARAN BARISAN PENTADBIR ===================
+function renderPentadbirUI() {
+  const roles = ["pengetua", "gpk1", "gpkhem", "gpkkoku"];
+  roles.forEach(role => {
+    const data = pentadbirData[role];
+    if (!data) return;
+
+    const nameEl = document.getElementById("admin-name-" + role);
+    const photoEl = document.getElementById("admin-photo-" + role);
+    const iconEl = document.getElementById("admin-icon-" + role);
+
+    if (nameEl) nameEl.textContent = data.nama;
+
+    if (photoEl && iconEl) {
+      if (data.gambar && data.gambar.trim() !== "") {
+        photoEl.src = data.gambar;
+        photoEl.classList.remove("hidden");
+        iconEl.classList.add("hidden");
+      } else {
+        photoEl.classList.add("hidden");
+        iconEl.classList.remove("hidden");
+      }
+    }
+  });
 }
 
-// =================== SUSUNAN KEMAS JADUAL GURU ===================
-// Nombor Bil Center, Nama Penuh & Jawatan Susun Kiri Kemas
+// Apabila admin menukar pilihan jawatan di panel admin
+function onPentadbirRoleSelect() {
+  const roleSelect = document.getElementById("pentadbir-role");
+  const nameInput = document.getElementById("pentadbir-name");
+  const fileInput = document.getElementById("pentadbir-file");
+  const previewImg = document.getElementById("pentadbir-preview-img");
+  const previewIcon = document.getElementById("pentadbir-preview-icon");
+
+  if (!roleSelect || !nameInput) return;
+  const role = roleSelect.value;
+  const current = pentadbirData[role] || DEFAULT_PENTADBIR[role];
+
+  nameInput.value = current.nama;
+  currentSelectedImageBase64 = current.gambar || "";
+  if (fileInput) fileInput.value = "";
+
+  if (currentSelectedImageBase64) {
+    previewImg.src = currentSelectedImageBase64;
+    previewImg.classList.remove("hidden");
+    previewIcon.classList.add("hidden");
+  } else {
+    previewImg.classList.add("hidden");
+    previewIcon.classList.remove("hidden");
+  }
+}
+
+// Membaca fail gambar & memampatkannya ke Base64 (Maksimum 400px)
+function previewPentadbirImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement("canvas");
+      const MAX_WIDTH = 400;
+      const MAX_HEIGHT = 400;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width;
+          width = MAX_WIDTH;
+        }
+      } else {
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height;
+          height = MAX_HEIGHT;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Kualiti JPEG 0.7 untuk saiz ringan
+      currentSelectedImageBase64 = canvas.toDataURL("image/jpeg", 0.7);
+
+      const previewImg = document.getElementById("pentadbir-preview-img");
+      const previewIcon = document.getElementById("pentadbir-preview-icon");
+      if (previewImg && previewIcon) {
+        previewImg.src = currentSelectedImageBase64;
+        previewImg.classList.remove("hidden");
+        previewIcon.classList.add("hidden");
+      }
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Simpan Kemas Kini Pentadbir
+function submitPentadbirUpdate() {
+  const roleSelect = document.getElementById("pentadbir-role");
+  const nameInput = document.getElementById("pentadbir-name");
+
+  if (!roleSelect || !nameInput) return;
+  const role = roleSelect.value;
+  const newName = nameInput.value.trim();
+
+  if (!newName) {
+    alert("Sila masukkan nama penuh pentadbir.");
+    return;
+  }
+
+  const payload = {
+    id: role,
+    jawatan: DEFAULT_PENTADBIR[role].jawatan,
+    nama: newName,
+    gambar: currentSelectedImageBase64
+  };
+
+  // Simpan terus ke data setempat agar terpapar serta-merta
+  pentadbirData[role] = payload;
+  try {
+    localStorage.setItem(CACHE_KEY_PENTADBIR, JSON.stringify(pentadbirData));
+  } catch(e){}
+  renderPentadbirUI();
+
+  // Hantar ke Google Sheets
+  postDataToScript("updatePentadbir", payload, "btn-submit-pentadbir").then(() => {
+    alert("Maklumat " + payload.jawatan + " berjaya dikemas kini!");
+  });
+}
+
+// =================== JADUAL GURU (SUSUN KIRI KEMAS) ===================
 function renderTeachers(teachers) {
   const tbody = document.getElementById("teachers-table-body");
   if (!tbody) return;
 
-  if (!teachers || teachers.length === 0) {
-    teachers = FALLBACK_TEACHERS;
-  }
+  if (!teachers || teachers.length === 0) teachers = FALLBACK_TEACHERS;
 
   tbody.innerHTML = teachers.map((t, idx) => {
     const no = t.no || (idx + 1);
     let nama = t.nama || t["nama guru"] || t.Nama || "-";
     let jawatan = t.jawatan || t.Jawatan || "-";
 
-    // Bersihkan sebarang sisa teks kod gred
     nama = String(nama).replace(/\b(DG\d+|N\d+|C\d+|H\d+)\b/gi, "").trim();
     jawatan = String(jawatan).replace(/\b(DG\d+|N\d+|C\d+|H\d+)\b/gi, "").trim();
 
@@ -142,23 +289,37 @@ function renderTakwim(events) {
   `).join("");
 }
 
-// =================== PENGAMBILAN DATA (GET) ===================
+// =================== PENGAMBILAN DATA GOOGLE SHEETS ===================
 async function fetchGoogleData() {
   const statusEl = document.getElementById("cms-status");
   const lastUpdatedEl = document.getElementById("last-updated");
 
   try {
     const res = await fetch(APPS_SCRIPT_URL);
-    if (!res.ok) throw new Error("Respons pelayan tidak sah");
+    if (!res.ok) throw new Error("Sambungan pelayan gagal");
 
     const data = await res.json();
     if (data.status === "success") {
-      // 1. Pengumuman
+      // Pentadbir
+      if (data.pentadbir && Array.isArray(data.pentadbir) && data.pentadbir.length > 0) {
+        data.pentadbir.forEach(p => {
+          if (p.id && pentadbirData[p.id]) {
+            pentadbirData[p.id].nama = p.nama || pentadbirData[p.id].nama;
+            if (p.gambar) pentadbirData[p.id].gambar = p.gambar;
+          }
+        });
+        try {
+          localStorage.setItem(CACHE_KEY_PENTADBIR, JSON.stringify(pentadbirData));
+        } catch(e){}
+        renderPentadbirUI();
+      }
+
+      // Pengumuman
       if (data.pengumuman && data.pengumuman.length > 0) {
         renderAnnouncements(data.pengumuman);
       }
 
-      // 2. Guru (Tapis & Simpan Secara Kekal Supaya Tidak Hilang)
+      // Guru
       if (data.guru && Array.isArray(data.guru) && data.guru.length > 0) {
         const validTeachers = data.guru.map((t, idx) => ({
           no: t.no || (idx + 1),
@@ -175,7 +336,7 @@ async function fetchGoogleData() {
         }
       }
 
-      // 3. Takwim
+      // Takwim
       if (data.takwim && data.takwim.length > 0) {
         renderTakwim(data.takwim);
       }
@@ -189,7 +350,6 @@ async function fetchGoogleData() {
       }
     }
   } catch (err) {
-    console.warn("Menggunakan data cache setempat yang tersedia.");
     if (statusEl) {
       statusEl.innerHTML = `<span class='text-emerald-700 font-semibold'><i class='fa-solid fa-circle-check text-emerald-500 mr-1'></i> Pangkalan Data Aktif (Tersimpan Secara Kekal)</span>`;
     }
@@ -311,8 +471,9 @@ function setupSearch() {
   });
 }
 
-// Muatkan serta-merta pada permulaan supaya tidak pernah kosong
+// Inisialisasi awal
 document.addEventListener("DOMContentLoaded", () => {
+  renderPentadbirUI();
   renderTeachers(allTeachersData);
   renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
   renderTakwim(FALLBACK_TAKWIM);
