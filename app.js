@@ -6,6 +6,7 @@
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJsneV6VGEqRbGnxHr1mpXpv2ihZUYcwSM6BFQvymaw36kIyZ1c3yhSw/exec";
 const CACHE_KEY_GURU = "semekar_guru_cache_v2";
 const CACHE_KEY_PENTADBIR = "semekar_pentadbir_cache_v2";
+const CACHE_KEY_GKMP = "semekar_gkmp_cache_v1";
 
 const DEFAULT_PENTADBIR = {
   pengetua: { id: "pengetua", jawatan: "Pengetua", nama: "Cikgu Abd Hadi bin Adman", gambar: "" },
@@ -14,14 +15,25 @@ const DEFAULT_PENTADBIR = {
   gpkkoku: { id: "gpkkoku", jawatan: "GPK Kokurikulum", nama: "Cikgu Zainal bin Mohd Zabir", gambar: "" }
 };
 
+const DEFAULT_GKMP = {
+  gkmpsm: { id: "gkmpsm", jawatan: "GKMP Sains & Matematik", nama: "Cikgu Mohd Riduwan bin Mohd Yasan", gambar: "" },
+  gkmptv: { id: "gkmptv", jawatan: "GKMP Teknik & Vokasional", nama: "Cikgu Mohd Nizam bin Subani", gambar: "" },
+  gmpbahasa: { id: "gmpbahasa", jawatan: "GKMP Bahasa", nama: "Cikgu Rohana binti Jasmin", gambar: "" },
+  gkmpsk: { id: "gkmpsk", jawatan: "GKMP Sains Kemasyarakatan", nama: "Cikgu Mohamaad Fadzeli bin Azam", gambar: "" }
+};
+
 let pentadbirData = { ...DEFAULT_PENTADBIR };
+let gkmpData = { ...DEFAULT_GKMP };
+
 let currentSelectedImageBase64 = "";
+let currentSelectedGkmpImageBase64 = "";
 
 try {
   const cachedPentadbir = localStorage.getItem(CACHE_KEY_PENTADBIR);
-  if (cachedPentadbir) {
-    pentadbirData = JSON.parse(cachedPentadbir);
-  }
+  if (cachedPentadbir) pentadbirData = JSON.parse(cachedPentadbir);
+
+  const cachedGkmp = localStorage.getItem(CACHE_KEY_GKMP);
+  if (cachedGkmp) gkmpData = JSON.parse(cachedGkmp);
 } catch (e) {}
 
 const FALLBACK_TEACHERS = [
@@ -95,7 +107,7 @@ try {
   }
 } catch (e) {}
 
-// =================== PENGURUSAN PAPARAN PENTADBIR ===================
+// =================== PAPARAN PENGURUSAN ===================
 function renderPentadbirUI() {
   const roles = ["pengetua", "gpk1", "gpkhem", "gpkkoku"];
   roles.forEach(role => {
@@ -121,6 +133,32 @@ function renderPentadbirUI() {
   });
 }
 
+function renderGkmpUI() {
+  const roles = ["gkmpsm", "gkmptv", "gmpbahasa", "gkmpsk"];
+  roles.forEach(role => {
+    const data = gkmpData[role];
+    if (!data) return;
+
+    const nameEl = document.getElementById("admin-name-" + role);
+    const photoEl = document.getElementById("admin-photo-" + role);
+    const iconEl = document.getElementById("admin-icon-" + role);
+
+    if (nameEl) nameEl.textContent = data.nama;
+
+    if (photoEl && iconEl) {
+      if (data.gambar && data.gambar.trim() !== "") {
+        photoEl.src = data.gambar;
+        photoEl.classList.remove("hidden");
+        iconEl.classList.add("hidden");
+      } else {
+        photoEl.classList.add("hidden");
+        iconEl.classList.remove("hidden");
+      }
+    }
+  });
+}
+
+// Handler Borang Pentadbir
 function onPentadbirRoleSelect() {
   const roleSelect = document.getElementById("pentadbir-role");
   const nameInput = document.getElementById("pentadbir-name");
@@ -155,37 +193,17 @@ function previewPentadbirImage(event) {
     const img = new Image();
     img.onload = function() {
       const canvas = document.createElement("canvas");
-      const MAX_WIDTH = 400;
-      const MAX_HEIGHT = 400;
-      let width = img.width;
-      let height = img.height;
-
-      if (width > height) {
-        if (width > MAX_WIDTH) {
-          height *= MAX_WIDTH / width;
-          width = MAX_WIDTH;
-        }
-      } else {
-        if (height > MAX_HEIGHT) {
-          width *= MAX_HEIGHT / height;
-          height = MAX_HEIGHT;
-        }
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, width, height);
-
+      const MAX = 400;
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > MAX) { h *= MAX / w; w = MAX; } }
+      else { if (h > MAX) { w *= MAX / h; h = MAX; } }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
       currentSelectedImageBase64 = canvas.toDataURL("image/jpeg", 0.7);
 
-      const previewImg = document.getElementById("pentadbir-preview-img");
-      const previewIcon = document.getElementById("pentadbir-preview-icon");
-      if (previewImg && previewIcon) {
-        previewImg.src = currentSelectedImageBase64;
-        previewImg.classList.remove("hidden");
-        previewIcon.classList.add("hidden");
-      }
+      document.getElementById("pentadbir-preview-img").src = currentSelectedImageBase64;
+      document.getElementById("pentadbir-preview-img").classList.remove("hidden");
+      document.getElementById("pentadbir-preview-icon").classList.add("hidden");
     };
     img.src = e.target.result;
   };
@@ -193,33 +211,84 @@ function previewPentadbirImage(event) {
 }
 
 function submitPentadbirUpdate() {
-  const roleSelect = document.getElementById("pentadbir-role");
-  const nameInput = document.getElementById("pentadbir-name");
+  const role = document.getElementById("pentadbir-role").value;
+  const name = document.getElementById("pentadbir-name").value.trim();
+  if (!name) { alert("Sila masukkan nama."); return; }
 
-  if (!roleSelect || !nameInput) return;
-  const role = roleSelect.value;
-  const newName = nameInput.value.trim();
-
-  if (!newName) {
-    alert("Sila masukkan nama penuh pentadbir.");
-    return;
-  }
-
-  const payload = {
-    id: role,
-    jawatan: DEFAULT_PENTADBIR[role].jawatan,
-    nama: newName,
-    gambar: currentSelectedImageBase64
-  };
-
+  const payload = { id: role, jawatan: DEFAULT_PENTADBIR[role].jawatan, nama: name, gambar: currentSelectedImageBase64 };
   pentadbirData[role] = payload;
-  try {
-    localStorage.setItem(CACHE_KEY_PENTADBIR, JSON.stringify(pentadbirData));
-  } catch(e){}
+  try { localStorage.setItem(CACHE_KEY_PENTADBIR, JSON.stringify(pentadbirData)); } catch(e){}
   renderPentadbirUI();
 
   postDataToScript("updatePentadbir", payload, "btn-submit-pentadbir").then(() => {
-    alert("Maklumat " + payload.jawatan + " berjaya dikemas kini!");
+    alert("Maklumat Pentadbir berjaya dikemas kini!");
+  });
+}
+
+// Handler Borang GKMP
+function onGkmpRoleSelect() {
+  const roleSelect = document.getElementById("gkmp-role");
+  const nameInput = document.getElementById("gkmp-name");
+  const fileInput = document.getElementById("gkmp-file");
+  const previewImg = document.getElementById("gkmp-preview-img");
+  const previewIcon = document.getElementById("gkmp-preview-icon");
+
+  if (!roleSelect || !nameInput) return;
+  const role = roleSelect.value;
+  const current = gkmpData[role] || DEFAULT_GKMP[role];
+
+  nameInput.value = current.nama;
+  currentSelectedGkmpImageBase64 = current.gambar || "";
+  if (fileInput) fileInput.value = "";
+
+  if (currentSelectedGkmpImageBase64) {
+    previewImg.src = currentSelectedGkmpImageBase64;
+    previewImg.classList.remove("hidden");
+    previewIcon.classList.add("hidden");
+  } else {
+    previewImg.classList.add("hidden");
+    previewIcon.classList.remove("hidden");
+  }
+}
+
+function previewGkmpImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement("canvas");
+      const MAX = 400;
+      let w = img.width, h = img.height;
+      if (w > h) { if (w > MAX) { h *= MAX / w; w = MAX; } }
+      else { if (h > MAX) { w *= MAX / h; h = MAX; } }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+      currentSelectedGkmpImageBase64 = canvas.toDataURL("image/jpeg", 0.7);
+
+      document.getElementById("gkmp-preview-img").src = currentSelectedGkmpImageBase64;
+      document.getElementById("gkmp-preview-img").classList.remove("hidden");
+      document.getElementById("gkmp-preview-icon").classList.add("hidden");
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitGkmpUpdate() {
+  const role = document.getElementById("gkmp-role").value;
+  const name = document.getElementById("gkmp-name").value.trim();
+  if (!name) { alert("Sila masukkan nama."); return; }
+
+  const payload = { id: role, jawatan: DEFAULT_GKMP[role].jawatan, nama: name, gambar: currentSelectedGkmpImageBase64 };
+  gkmpData[role] = payload;
+  try { localStorage.setItem(CACHE_KEY_GKMP, JSON.stringify(gkmpData)); } catch(e){}
+  renderGkmpUI();
+
+  postDataToScript("updateGkmp", payload, "btn-submit-gkmp").then(() => {
+    alert("Maklumat GKMP berjaya dikemas kini!");
   });
 }
 
@@ -289,6 +358,7 @@ async function fetchGoogleData() {
 
     const data = await res.json();
     if (data.status === "success") {
+      // Pentadbir
       if (data.pentadbir && Array.isArray(data.pentadbir) && data.pentadbir.length > 0) {
         data.pentadbir.forEach(p => {
           if (p.id && pentadbirData[p.id]) {
@@ -296,10 +366,20 @@ async function fetchGoogleData() {
             if (p.gambar) pentadbirData[p.id].gambar = p.gambar;
           }
         });
-        try {
-          localStorage.setItem(CACHE_KEY_PENTADBIR, JSON.stringify(pentadbirData));
-        } catch(e){}
+        try { localStorage.setItem(CACHE_KEY_PENTADBIR, JSON.stringify(pentadbirData)); } catch(e){}
         renderPentadbirUI();
+      }
+
+      // GKMP
+      if (data.gkmp && Array.isArray(data.gkmp) && data.gkmp.length > 0) {
+        data.gkmp.forEach(g => {
+          if (g.id && gkmpData[g.id]) {
+            gkmpData[g.id].nama = g.nama || gkmpData[g.id].nama;
+            if (g.gambar) gkmpData[g.id].gambar = g.gambar;
+          }
+        });
+        try { localStorage.setItem(CACHE_KEY_GKMP, JSON.stringify(gkmpData)); } catch(e){}
+        renderGkmpUI();
       }
 
       if (data.pengumuman && data.pengumuman.length > 0) {
@@ -315,9 +395,7 @@ async function fetchGoogleData() {
 
         if (validTeachers.length > 0) {
           allTeachersData = validTeachers;
-          try {
-            localStorage.setItem(CACHE_KEY_GURU, JSON.stringify(allTeachersData));
-          } catch(e){}
+          try { localStorage.setItem(CACHE_KEY_GURU, JSON.stringify(allTeachersData)); } catch(e){}
           renderTeachers(allTeachersData);
         }
       }
@@ -341,7 +419,7 @@ async function fetchGoogleData() {
   }
 }
 
-// =================== POST DATA (POST) ===================
+// =================== POST DATA ===================
 async function postDataToScript(action, data, submitBtnId) {
   const statusEl = document.getElementById("admin-action-status");
   const btn = document.getElementById(submitBtnId);
@@ -458,6 +536,7 @@ function setupSearch() {
 
 document.addEventListener("DOMContentLoaded", () => {
   renderPentadbirUI();
+  renderGkmpUI();
   renderTeachers(allTeachersData);
   renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
   renderTakwim(FALLBACK_TAKWIM);
