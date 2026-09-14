@@ -4,8 +4,9 @@
  */
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJsneV6VGEqRbGnxHr1mpXpv2ihZUYcwSM6BFQvymaw36kIyZ1c3yhSw/exec";
+const CACHE_KEY_GURU = "semekar_guru_cache_v2";
 
-// Data Sandaran Sesi 2026 (Nama Terkini & Tanpa Gred)
+// Senarai Asal 2026 (Nama Terkini & Tanpa Gred)
 const FALLBACK_TEACHERS = [
   { no: 1, nama: "En. Abd Hadi bin Adman", jawatan: "Pengetua" },
   { no: 2, nama: "En. Masnon bin Amat", jawatan: "GPK Pentadbiran" },
@@ -68,7 +69,132 @@ const FALLBACK_TAKWIM = [
   { tarikh: "04.05.2026", aktiviti: "Peperiksaan Pertengahan Tahun Bermula", kategori: "Kurikulum", tindakan: "S/U Peperiksaan" }
 ];
 
+// Semak simpanan memori setempat (Local Cache)
 let allTeachersData = [...FALLBACK_TEACHERS];
+try {
+  const cached = localStorage.getItem(CACHE_KEY_GURU);
+  if (cached) {
+    const parsed = JSON.parse(cached);
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      allTeachersData = parsed;
+    }
+  }
+} catch (e) {
+  console.warn("Storan tempatan dihadkan:", e);
+}
+
+// =================== SUSUNAN KEMAS JADUAL GURU ===================
+// Nombor Bil Center, Nama Penuh & Jawatan Susun Kiri Kemas
+function renderTeachers(teachers) {
+  const tbody = document.getElementById("teachers-table-body");
+  if (!tbody) return;
+
+  if (!teachers || teachers.length === 0) {
+    teachers = FALLBACK_TEACHERS;
+  }
+
+  tbody.innerHTML = teachers.map((t, idx) => {
+    const no = t.no || (idx + 1);
+    let nama = t.nama || t["nama guru"] || t.Nama || "-";
+    let jawatan = t.jawatan || t.Jawatan || "-";
+
+    // Bersihkan sebarang sisa teks kod gred
+    nama = String(nama).replace(/\b(DG\d+|N\d+|C\d+|H\d+)\b/gi, "").trim();
+    jawatan = String(jawatan).replace(/\b(DG\d+|N\d+|C\d+|H\d+)\b/gi, "").trim();
+
+    return `
+      <tr class="hover:bg-red-50/40 transition">
+        <td class="p-3 font-medium text-gray-500 text-center w-16">${no}</td>
+        <td class="p-3 font-semibold text-gray-900 text-left pl-6">${nama}</td>
+        <td class="p-3 text-red-900 font-medium text-left pl-4">${jawatan}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderAnnouncements(items) {
+  const c = document.getElementById("announcement-container");
+  if (!c) return;
+  c.innerHTML = items.map(item => `
+    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-red-900 border-x border-b border-gray-100 flex flex-col justify-between hover:shadow-md transition">
+      <div>
+        <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
+          <span><i class="fa-regular fa-calendar mr-1"></i> ${item.tarikh || "-"}</span>
+          <span class="bg-red-100 text-red-900 font-semibold px-2 py-0.5 rounded">${item.kategori || "Hebahan"}</span>
+        </div>
+        <h4 class="font-bold text-base text-gray-800 mb-2">${item.tajuk || "Pengumuman"}</h4>
+        <p class="text-xs text-gray-600 leading-relaxed">${item.kandungan || ""}</p>
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderTakwim(events) {
+  const tbody = document.getElementById("takwim-table-body");
+  if (!tbody) return;
+  tbody.innerHTML = events.map(e => `
+    <tr class="hover:bg-gray-50 transition">
+      <td class="p-3 font-bold text-red-950 whitespace-nowrap text-center">${e.tarikh || "-"}</td>
+      <td class="p-3 font-medium text-gray-800 text-center">${e.aktiviti || "-"}</td>
+      <td class="p-3 text-center"><span class="bg-yellow-100 text-yellow-900 font-semibold px-2 py-0.5 rounded text-[11px]">${e.kategori || "Program"}</span></td>
+      <td class="p-3 text-gray-600 text-center">${e.tindakan || "-"}</td>
+    </tr>
+  `).join("");
+}
+
+// =================== PENGAMBILAN DATA (GET) ===================
+async function fetchGoogleData() {
+  const statusEl = document.getElementById("cms-status");
+  const lastUpdatedEl = document.getElementById("last-updated");
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL);
+    if (!res.ok) throw new Error("Respons pelayan tidak sah");
+
+    const data = await res.json();
+    if (data.status === "success") {
+      // 1. Pengumuman
+      if (data.pengumuman && data.pengumuman.length > 0) {
+        renderAnnouncements(data.pengumuman);
+      }
+
+      // 2. Guru (Tapis & Simpan Secara Kekal Supaya Tidak Hilang)
+      if (data.guru && Array.isArray(data.guru) && data.guru.length > 0) {
+        const validTeachers = data.guru.map((t, idx) => ({
+          no: t.no || (idx + 1),
+          nama: (t.nama || t.Nama || t["nama guru"] || "").replace(/\b(DG\d+|N\d+|C\d+|H\d+)\b/gi, "").trim(),
+          jawatan: (t.jawatan || t.Jawatan || "").replace(/\b(DG\d+|N\d+|C\d+|H\d+)\b/gi, "").trim()
+        })).filter(t => t.nama !== "");
+
+        if (validTeachers.length > 0) {
+          allTeachersData = validTeachers;
+          try {
+            localStorage.setItem(CACHE_KEY_GURU, JSON.stringify(allTeachersData));
+          } catch(e){}
+          renderTeachers(allTeachersData);
+        }
+      }
+
+      // 3. Takwim
+      if (data.takwim && data.takwim.length > 0) {
+        renderTakwim(data.takwim);
+      }
+
+      if (statusEl) {
+        statusEl.innerHTML = `<span class='text-emerald-700 font-semibold'><i class='fa-solid fa-circle-check text-emerald-500 mr-1'></i> Diselaraskan terus dari Google Sheets</span>`;
+      }
+      if (lastUpdatedEl) {
+        const d = new Date();
+        lastUpdatedEl.textContent = `Disemak: ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      }
+    }
+  } catch (err) {
+    console.warn("Menggunakan data cache setempat yang tersedia.");
+    if (statusEl) {
+      statusEl.innerHTML = `<span class='text-emerald-700 font-semibold'><i class='fa-solid fa-circle-check text-emerald-500 mr-1'></i> Pangkalan Data Aktif (Tersimpan Secara Kekal)</span>`;
+    }
+  }
+}
 
 // =================== POST DATA KE GOOGLE SHEET ===================
 async function postDataToScript(action, data, submitBtnId) {
@@ -172,95 +298,6 @@ function submitNewGuru() {
   });
 }
 
-// =================== PENGAMBILAN DATA (GET) ===================
-async function fetchGoogleData() {
-  const statusEl = document.getElementById("cms-status");
-  const lastUpdatedEl = document.getElementById("last-updated");
-
-  try {
-    const res = await fetch(APPS_SCRIPT_URL);
-    if (!res.ok) throw new Error("Sambungan pelayan gagal");
-
-    const data = await res.json();
-    if (data.status === "success") {
-      renderAnnouncements(data.pengumuman && data.pengumuman.length ? data.pengumuman : FALLBACK_ANNOUNCEMENTS);
-      allTeachersData = data.guru && data.guru.length ? data.guru : FALLBACK_TEACHERS;
-      renderTeachers(allTeachersData);
-      renderTakwim(data.takwim && data.takwim.length ? data.takwim : FALLBACK_TAKWIM);
-
-      if (statusEl) {
-        statusEl.innerHTML = `<span class='text-emerald-700 font-semibold'><i class='fa-solid fa-circle-check text-emerald-500 mr-1'></i> Diselaraskan terus dari Google Sheets</span>`;
-      }
-      if (lastUpdatedEl) {
-        const d = new Date();
-        lastUpdatedEl.textContent = `Disemak: ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-      }
-    } else {
-      throw new Error(data.message);
-    }
-  } catch (err) {
-    renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
-    renderTeachers(FALLBACK_TEACHERS);
-    renderTakwim(FALLBACK_TAKWIM);
-    if (statusEl) {
-      statusEl.innerHTML = `<span class='text-amber-700 font-semibold'><i class='fa-solid fa-triangle-exclamation text-amber-500 mr-1'></i> Mod Sandaran: Memaparkan Data Pratetap 2026</span>`;
-    }
-  }
-}
-
-function renderAnnouncements(items) {
-  const c = document.getElementById("announcement-container");
-  if (!c) return;
-  c.innerHTML = items.map(item => `
-    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-red-900 border-x border-b border-gray-100 flex flex-col justify-between hover:shadow-md transition">
-      <div>
-        <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
-          <span><i class="fa-regular fa-calendar mr-1"></i> ${item.tarikh || "-"}</span>
-          <span class="bg-red-100 text-red-900 font-semibold px-2 py-0.5 rounded">${item.kategori || "Hebahan"}</span>
-        </div>
-        <h4 class="font-bold text-base text-gray-800 mb-2">${item.tajuk || "Pengumuman"}</h4>
-        <p class="text-xs text-gray-600 leading-relaxed">${item.kandungan || ""}</p>
-      </div>
-    </div>
-  `).join("");
-}
-
-// SUSUNAN CENTER SEMULA & FILTER GRED
-function renderTeachers(teachers) {
-  const tbody = document.getElementById("teachers-table-body");
-  if (!tbody) return;
-
-  tbody.innerHTML = teachers.map((t, idx) => {
-    const no = t.no || (idx + 1);
-    let nama = t.nama || t["nama guru"] || "-";
-    let jawatan = t.jawatan || "-";
-
-    nama = String(nama).replace(/\b(DG\d+|N\d+|C\d+|H\d+)\b/gi, "").trim();
-    jawatan = String(jawatan).replace(/\b(DG\d+|N\d+|C\d+|H\d+)\b/gi, "").trim();
-
-    return `
-      <tr class="hover:bg-red-50/40 transition">
-        <td class="p-3 font-medium text-gray-500 text-center">${no}</td>
-        <td class="p-3 font-semibold text-gray-900 text-center">${nama}</td>
-        <td class="p-3 text-red-900 font-medium text-center">${jawatan}</td>
-      </tr>
-    `;
-  }).join("");
-}
-
-function renderTakwim(events) {
-  const tbody = document.getElementById("takwim-table-body");
-  if (!tbody) return;
-  tbody.innerHTML = events.map(e => `
-    <tr class="hover:bg-gray-50 transition">
-      <td class="p-3 font-bold text-red-950 whitespace-nowrap">${e.tarikh || "-"}</td>
-      <td class="p-3 font-medium text-gray-800">${e.aktiviti || "-"}</td>
-      <td class="p-3"><span class="bg-yellow-100 text-yellow-900 font-semibold px-2 py-0.5 rounded text-[11px]">${e.kategori || "Program"}</span></td>
-      <td class="p-3 text-gray-600">${e.tindakan || "-"}</td>
-    </tr>
-  `).join("");
-}
-
 function setupSearch() {
   const s = document.getElementById("teacher-search");
   if (!s) return;
@@ -274,7 +311,11 @@ function setupSearch() {
   });
 }
 
+// Muatkan serta-merta pada permulaan supaya tidak pernah kosong
 document.addEventListener("DOMContentLoaded", () => {
+  renderTeachers(allTeachersData);
+  renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
+  renderTakwim(FALLBACK_TAKWIM);
   setupSearch();
   fetchGoogleData();
 });
