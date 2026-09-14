@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal Rasmi SMK Kamarul Ariffin (SEMEKAR)</title>
+  
+  <!-- Favicon Logo Sekolah -->
+  <link rel="icon" type="image/png" href="logo.png" />
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
@@ -27,17 +31,18 @@
     </div>
   </header>
 
-  <!-- NAVBAR -->
+  <!-- NAVBAR DENGAN LOGO SEKOLAH -->
   <nav class="bg-white shadow-md sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-8 flex justify-between items-center h-20">
       <div class="flex items-center space-x-3">
-        <div class="w-12 h-12 bg-red-900 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-inner">
-          <i class="fa-solid fa-graduation-cap"></i>
-        </div>
-        <div>
-          <h1 class="text-lg sm:text-xl font-black text-red-950 tracking-tight leading-none">SMK KAMARUL ARIFFIN</h1>
-          <p class="text-xs text-gray-500 tracking-wider">SEMEKAR HEBAT • KESUNGGUHAN KUNCI KECEMERLANGAN</p>
-        </div>
+        <!-- Lokasi 1: Logo Navigasi -->
+        <a href="#utama" class="flex items-center space-x-3">
+          <img src="logo.png" alt="Logo Rasmi SMK Kamarul Ariffin" class="h-12 w-auto object-contain drop-shadow-sm transition-transform hover:scale-105" />
+          <div>
+            <h1 class="text-lg sm:text-xl font-black text-red-950 tracking-tight leading-none">SMK KAMARUL ARIFFIN</h1>
+            <p class="text-xs text-gray-500 tracking-wider">SEMEKAR HEBAT • KESUNGGUHAN KUNCI KECEMERLANGAN</p>
+          </div>
+        </a>
       </div>
 
       <!-- DESKTOP NAVIGATION -->
@@ -71,10 +76,15 @@
     </div>
   </nav>
 
-  <!-- HERO -->
-  <section id="utama" class="hero-pattern relative text-white py-20 px-4 sm:px-8">
-    <div class="max-w-5xl mx-auto text-center relative z-10">
-      <span class="inline-block bg-yellow-500 text-red-950 font-bold text-xs uppercase px-3 py-1 rounded-full mb-4 shadow">
+  <!-- HERO DENGAN LOGO SEKOLAH UTAMA -->
+  <section id="utama" class="hero-pattern relative text-white py-16 sm:py-20 px-4 sm:px-8">
+    <div class="max-w-5xl mx-auto text-center relative z-10 flex flex-col items-center">
+      <!-- Lokasi 2: Logo Utama di Hero Section -->
+      <div class="mb-5 bg-white/10 p-3 rounded-2xl backdrop-blur-sm border border-white/20 shadow-2xl">
+        <img src="logo.png" alt="Lencana Rasmi SEMEKAR" class="h-24 sm:h-32 w-auto object-contain drop-shadow-2xl" />
+      </div>
+
+      <span class="inline-block bg-yellow-500 text-red-950 font-bold text-xs uppercase px-3 py-1 rounded-full mb-3 shadow">
         Portal Rasmi Sekolah
       </span>
       <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
@@ -131,12 +141,27 @@
     </div>
   </section>
 
-  <!-- PROFIL SEKOLAH -->
+  <!-- PROFIL SEKOLAH (DENGAN KAD LENCANA RASMI) -->
   <section id="profil" class="py-16 bg-red-50/40 px-4 sm:px-8 border-y border-red-100">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-10">
         <h3 class="text-2xl sm:text-3xl font-bold text-red-950">Profil Sekolah</h3>
         <div class="w-16 h-1 bg-yellow-500 mx-auto mt-2 rounded"></div>
+      </div>
+
+      <!-- Kad Lencana & Pengenalan Teratas -->
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mb-8 max-w-4xl mx-auto flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+        <!-- Lokasi 3: Logo dalam Kad Pengenalan Profil -->
+        <div class="flex-shrink-0 bg-red-50 p-4 rounded-xl border border-red-100">
+          <img src="logo.png" alt="Lencana Sekolah SMK Kamarul Ariffin" class="h-28 w-auto object-contain mx-auto" />
+        </div>
+        <div>
+          <span class="inline-block bg-red-100 text-red-900 font-bold text-[11px] px-2.5 py-0.5 rounded-full mb-1">Lencana & Falsafah</span>
+          <h4 class="font-bold text-lg text-gray-900 mb-1">Moto: "Kesungguhan Kunci Kecemerlangan"</h4>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            Lencana SMK Kamarul Ariffin melambangkan kesepaduan ilmu pengetahuan, pertumbuhan seimbang dari segi jasmani, emosi, rohani dan intelek, serta iltizam warga sekolah dalam memacu kejayaan berdaya saing.
+          </p>
+        </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -231,7 +256,7 @@
       </div>
     </div>
 
-    <!-- KOTAK JADUAL CENTER & TEKS KEMAS SUSUN KIRI -->
+    <!-- JADUAL GURU (CENTERED CONTAINER, LEFT-ALIGNED CONTENT) -->
     <div class="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-xl shadow-sm border border-gray-200">
       <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 border-b pb-4">
         <div>
@@ -358,11 +383,15 @@
     </div>
   </section>
 
-  <!-- HUBUNGI KAMI -->
+  <!-- HUBUNGI KAMI DENGAN LOGO SEKOLAH -->
   <section id="hubungi" class="py-16 bg-gray-900 text-white px-4 sm:px-8">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
       <div>
-        <h3 class="text-2xl font-bold text-yellow-400 mb-3">SMK Kamarul Ariffin</h3>
+        <!-- Lokasi 4: Logo di Bahagian Hubungi Kami -->
+        <div class="flex items-center space-x-3 mb-4">
+          <img src="logo.png" alt="Logo SMK Kamarul Ariffin" class="h-12 w-auto object-contain bg-white rounded-lg p-1 shadow" />
+          <h3 class="text-2xl font-bold text-yellow-400">SMK Kamarul Ariffin</h3>
+        </div>
         <p class="text-gray-300 text-xs leading-relaxed mb-6">
           Sekolah Menengah Kebangsaan Kamarul Ariffin, Jalan Tenang, 85300 Labis, Segamat, Johor Darul Ta'zim.
         </p>
@@ -397,17 +426,16 @@
     <p>&copy; 2026 SMK Kamarul Ariffin (SEMEKAR). Hak Cipta Terpelihara.</p>
   </footer>
 
-  <!-- ================= MODAL LOGIN ADMIN ================= -->
+  <!-- ================= MODAL LOGIN ADMIN DENGAN LOGO SEKOLAH ================= -->
   <div id="login-modal" style="display: none;" class="fixed inset-0 bg-black/75 z-50 items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 relative">
       <button type="button" onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg cursor-pointer">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
+      <!-- Lokasi 5: Logo Sekolah di Header Login Modal -->
       <div class="text-center mb-6">
-        <div class="w-12 h-12 bg-red-100 text-red-900 rounded-full mx-auto flex items-center justify-center text-xl mb-2">
-          <i class="fa-solid fa-user-shield"></i>
-        </div>
+        <img src="logo.png" alt="Logo SEMEKAR" class="h-16 w-auto mx-auto mb-2 object-contain drop-shadow" />
         <h3 class="text-lg font-bold text-gray-900">Log Masuk Admin</h3>
         <p class="text-xs text-gray-500">Panel kemas kini kandungan SEMEKAR</p>
       </div>
@@ -434,7 +462,8 @@
     <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative my-8">
       <div class="flex justify-between items-center border-b pb-4 mb-4">
         <div class="flex items-center space-x-2">
-          <i class="fa-solid fa-pen-to-square text-red-900 text-xl"></i>
+          <!-- Lokasi 6: Ikon Logo Sekolah Kecil di Panel Admin -->
+          <img src="logo.png" alt="Logo SEMEKAR" class="h-6 w-auto object-contain" />
           <h3 class="text-base font-bold text-gray-900">Panel Kemas Kini Kandungan Sekolah</h3>
         </div>
         <div class="flex items-center space-x-2">
@@ -639,7 +668,7 @@
       if (m) m.classList.toggle("hidden");
     }
 
-    // PENGESAN HIGHLIGHT MENU AKTIF (SCROLLSPY)
+    // SCROLLSPY
     function setupNavigationHighlight() {
       const navLinks = document.querySelectorAll(".nav-link");
       const mobileLinks = document.querySelectorAll(".mobile-nav-link");
@@ -706,6 +735,6 @@
     });
   </script>
 
-  <script src="app.js?v=2026.10"></script>
+  <script src="app.js?v=2026.11"></script>
 </body>
 </html>
