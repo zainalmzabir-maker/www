@@ -71,31 +71,15 @@ const FALLBACK_TEACHERS = [
 
 const FALLBACK_ANNOUNCEMENTS = [
   {
-    tajuk: "Pendaftaran Sesi Persekolahan 2026",
-    tarikh: "10 Januari 2026",
-    kategori: "Penting",
-    kandungan: "Pendaftaran Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 di Dewan Semekar Hebat."
-  },
-  {
-    tajuk: "Kejohanan Olahraga Tahunan Kali Ke-27",
-    tarikh: "13 Februari 2026",
-    kategori: "Kokurikulum",
-    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput hadir memeriahkan kejohanan."
-  },
-  {
-    tajuk: "Program Transformasi Sekolah (TS25)",
-    tarikh: "Sesi 2026",
-    kategori: "Akademik",
-    kandungan: "Pembudayaan amalan PAK21 dan kemahiran berfikir aras tinggi (KBAT) untuk seluruh warga pelajar."
+    tajuk: "Sedang memuatkan data..",
+    tarikh: "Sedang memuatkan data..",
+    kategori: "Sila tunggu",
+    kandungan: "Sedang memuatkan data.."
   }
 ];
 
 const FALLBACK_TAKWIM = [
-  { tarikh: "12.01.2026", aktiviti: "Hari Pertama Persekolahan Sesi 2026", kategori: "Pengurusan", tindakan: "Semua Guru" },
-  { tarikh: "15.01.2026", aktiviti: "Kejohanan Merentas Desa Sekolah", kategori: "Kokurikulum", tindakan: "Unit Kokurikulum" },
-  { tarikh: "13.02.2026", aktiviti: "Kejohanan Sukan Tahunan Ke-27", kategori: "Kokurikulum", tindakan: "Majlis Sukan" },
-  { tarikh: "21.03.2026 - 29.03.2026", aktiviti: "Cuti Penggal 1 & Hari Raya Aidilfitri", kategori: "Cuti", tindakan: "Semua Murid" },
-  { tarikh: "04.05.2026", aktiviti: "Peperiksaan Pertengahan Tahun Bermula", kategori: "Kurikulum", tindakan: "S/U Peperiksaan" }
+  { tarikh: "sedang memuatkan..", aktiviti: "Sedang memuatkan..", kategori: "Sila tunggu", tindakan: "Sila tunggu" }
 ];
 
 let allTeachersData = [...FALLBACK_TEACHERS];
