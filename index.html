@@ -192,7 +192,7 @@
     </div>
 
     <!-- 4 PENTADBIR UTAMA -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
       <!-- Pengetua -->
       <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-red-900 border-x border-b border-gray-200">
         <div class="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden bg-gray-100 border-2 border-red-900 shadow-sm flex items-center justify-center">
@@ -234,24 +234,47 @@
       </div>
     </div>
 
-    <!-- GKMP -->
+    <!-- GKMP (DENGAN SOKONGAN FOTO DINAMIK) -->
     <h4 class="text-center font-bold text-gray-700 mb-6 text-xs uppercase tracking-widest">Guru Kanan Mata Pelajaran (GKMP)</h4>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-      <div class="p-4 bg-gray-100 rounded-lg text-center">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <!-- GKMP Sains & Matematik -->
+      <div class="bg-white rounded-xl shadow-sm p-5 text-center border border-gray-200">
+        <div class="w-20 h-20 mx-auto mb-2 rounded-full overflow-hidden bg-gray-100 border flex items-center justify-center">
+          <img id="admin-photo-gkmpsm" src="" alt="GKMP Sains & Matematik" class="w-full h-full object-cover hidden" />
+          <i id="admin-icon-gkmpsm" class="fa-solid fa-user-tie text-gray-600 text-2xl"></i>
+        </div>
         <p class="text-[11px] text-gray-500 font-medium">GKMP Sains & Matematik</p>
-        <p class="font-semibold text-gray-900 text-xs mt-1">Cikgu Mohd Riduwan bin Mohd Yasan</p>
+        <h5 id="admin-name-gkmpsm" class="font-bold text-gray-900 text-xs mt-1">Cikgu Mohd Riduwan bin Mohd Yasan</h5>
       </div>
-      <div class="p-4 bg-gray-100 rounded-lg text-center">
+
+      <!-- GKMP Teknik & Vokasional -->
+      <div class="bg-white rounded-xl shadow-sm p-5 text-center border border-gray-200">
+        <div class="w-20 h-20 mx-auto mb-2 rounded-full overflow-hidden bg-gray-100 border flex items-center justify-center">
+          <img id="admin-photo-gkmptv" src="" alt="GKMP Teknik & Vokasional" class="w-full h-full object-cover hidden" />
+          <i id="admin-icon-gkmptv" class="fa-solid fa-user-tie text-gray-600 text-2xl"></i>
+        </div>
         <p class="text-[11px] text-gray-500 font-medium">GKMP Teknik & Vokasional</p>
-        <p class="font-semibold text-gray-900 text-xs mt-1">Cikgu Mohd Nizam bin Subani</p>
+        <h5 id="admin-name-gkmptv" class="font-bold text-gray-900 text-xs mt-1">Cikgu Mohd Nizam bin Subani</h5>
       </div>
-      <div class="p-4 bg-gray-100 rounded-lg text-center">
+
+      <!-- GKMP Bahasa -->
+      <div class="bg-white rounded-xl shadow-sm p-5 text-center border border-gray-200">
+        <div class="w-20 h-20 mx-auto mb-2 rounded-full overflow-hidden bg-gray-100 border flex items-center justify-center">
+          <img id="admin-photo-gmpbahasa" src="" alt="GKMP Bahasa" class="w-full h-full object-cover hidden" />
+          <i id="admin-icon-gmpbahasa" class="fa-solid fa-user-tie text-gray-600 text-2xl"></i>
+        </div>
         <p class="text-[11px] text-gray-500 font-medium">GKMP Bahasa</p>
-        <p class="font-semibold text-gray-900 text-xs mt-1">Cikgu Rohana binti Jasmin</p>
+        <h5 id="admin-name-gmpbahasa" class="font-bold text-gray-900 text-xs mt-1">Cikgu Rohana binti Jasmin</h5>
       </div>
-      <div class="p-4 bg-gray-100 rounded-lg text-center">
+
+      <!-- GKMP Sains Kemasyarakatan -->
+      <div class="bg-white rounded-xl shadow-sm p-5 text-center border border-gray-200">
+        <div class="w-20 h-20 mx-auto mb-2 rounded-full overflow-hidden bg-gray-100 border flex items-center justify-center">
+          <img id="admin-photo-gkmpsk" src="" alt="GKMP Sains Kemasyarakatan" class="w-full h-full object-cover hidden" />
+          <i id="admin-icon-gkmpsk" class="fa-solid fa-user-tie text-gray-600 text-2xl"></i>
+        </div>
         <p class="text-[11px] text-gray-500 font-medium">GKMP Sains Kemasyarakatan</p>
-        <p class="font-semibold text-gray-900 text-xs mt-1">Cikgu Mohamaad Fadzeli bin Azam</p>
+        <h5 id="admin-name-gkmpsk" class="font-bold text-gray-900 text-xs mt-1">Cikgu Mohamaad Fadzeli bin Azam</h5>
       </div>
     </div>
 
@@ -454,7 +477,7 @@
     </div>
   </div>
 
-  <!-- ================= PANEL ADMIN ================= -->
+  <!-- ================= PANEL ADMIN / KEMAS KINI DATA ================= -->
   <div id="admin-panel-modal" style="display: none;" class="fixed inset-0 bg-black/75 z-50 items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative my-8">
       <div class="flex justify-between items-center border-b pb-4 mb-4">
@@ -472,6 +495,9 @@
       <div class="flex flex-wrap border-b border-gray-200 text-xs mb-4 gap-1">
         <button type="button" id="btn-tab-pentadbir" onclick="switchAdminTab('tab-pentadbir')" class="py-2 px-3 font-bold border-b-2 border-red-900 text-red-900 cursor-pointer">
           + Urus Pentadbir
+        </button>
+        <button type="button" id="btn-tab-gkmp" onclick="switchAdminTab('tab-gkmp')" class="py-2 px-3 font-semibold text-gray-500 hover:text-red-900 cursor-pointer">
+          + Urus GKMP
         </button>
         <button type="button" id="btn-tab-pengumuman" onclick="switchAdminTab('tab-pengumuman')" class="py-2 px-3 font-semibold text-gray-500 hover:text-red-900 cursor-pointer">
           + Pengumuman
@@ -504,7 +530,6 @@
         <div>
           <label class="block font-semibold mb-1">Muat Naik Gambar Baharu (JPG / PNG)</label>
           <input type="file" id="pentadbir-file" accept="image/*" onchange="previewPentadbirImage(event)" class="w-full border p-1.5 rounded bg-white" />
-          <p class="text-[10px] text-gray-400 mt-1">Format gambar disyorkan: Berukuran pasport atau potret (nisbah 1:1).</p>
         </div>
 
         <div id="pentadbir-preview-box" class="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg border">
@@ -512,11 +537,46 @@
             <img id="pentadbir-preview-img" src="" alt="Pratonton" class="w-full h-full object-cover hidden" />
             <i id="pentadbir-preview-icon" class="fa-solid fa-user text-gray-400 text-xl"></i>
           </div>
-          <span class="text-[11px] text-gray-600 font-medium">Pratonton gambar yang dipilih</span>
+          <span class="text-[11px] text-gray-600 font-medium">Pratonton gambar pentadbir</span>
         </div>
 
         <button type="button" id="btn-submit-pentadbir" onclick="submitPentadbirUpdate()" class="bg-red-950 text-white px-4 py-2 rounded font-bold hover:bg-red-900 transition cursor-pointer">
           Simpan Kemas Kini Pentadbir
+        </button>
+      </div>
+
+      <!-- Tab 01: Form Urus GKMP -->
+      <div id="form-add-gkmp" class="space-y-4 text-xs" style="display: none;">
+        <div>
+          <label class="block font-semibold mb-1">Pilih Bidang GKMP</label>
+          <select id="gkmp-role" onchange="onGkmpRoleSelect()" class="w-full border p-2 rounded bg-gray-50 font-medium">
+            <option value="gkmpsm">GKMP Sains & Matematik</option>
+            <option value="gkmptv">GKMP Teknik & Vokasional</option>
+            <option value="gmpbahasa">GKMP Bahasa</option>
+            <option value="gkmpsk">GKMP Sains Kemasyarakatan</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1">Nama Penuh GKMP</label>
+          <input type="text" id="gkmp-name" class="w-full border p-2 rounded" placeholder="Nama Penuh..." />
+        </div>
+
+        <div>
+          <label class="block font-semibold mb-1">Muat Naik Gambar Baharu (JPG / PNG)</label>
+          <input type="file" id="gkmp-file" accept="image/*" onchange="previewGkmpImage(event)" class="w-full border p-1.5 rounded bg-white" />
+        </div>
+
+        <div id="gkmp-preview-box" class="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg border">
+          <div class="w-14 h-14 rounded-full overflow-hidden bg-gray-200 border flex items-center justify-center">
+            <img id="gkmp-preview-img" src="" alt="Pratonton" class="w-full h-full object-cover hidden" />
+            <i id="gkmp-preview-icon" class="fa-solid fa-user text-gray-400 text-xl"></i>
+          </div>
+          <span class="text-[11px] text-gray-600 font-medium">Pratonton gambar GKMP</span>
+        </div>
+
+        <button type="button" id="btn-submit-gkmp" onclick="submitGkmpUpdate()" class="bg-red-950 text-white px-4 py-2 rounded font-bold hover:bg-red-900 transition cursor-pointer">
+          Simpan Kemas Kini GKMP
         </button>
       </div>
 
@@ -616,6 +676,7 @@
       const panel = document.getElementById("admin-panel-modal");
       if (panel) panel.style.display = "flex";
       if (typeof onPentadbirRoleSelect === "function") onPentadbirRoleSelect();
+      if (typeof onGkmpRoleSelect === "function") onGkmpRoleSelect();
     }
 
     function closeAdminPanel() {
@@ -678,8 +739,8 @@
     }
 
     function switchAdminTab(tabId) {
-      const tabs = ["tab-pentadbir", "tab-pengumuman", "tab-takwim", "tab-guru"];
-      const forms = ["form-add-pentadbir", "form-add-pengumuman", "form-add-takwim", "form-add-guru"];
+      const tabs = ["tab-pentadbir", "tab-gkmp", "tab-pengumuman", "tab-takwim", "tab-guru"];
+      const forms = ["form-add-pentadbir", "form-add-gkmp", "form-add-pengumuman", "form-add-takwim", "form-add-guru"];
 
       tabs.forEach((t, i) => {
         const btn = document.getElementById("btn-" + t);
@@ -704,8 +765,64 @@
       if (m) m.classList.toggle("hidden");
     }
 
+    // SCROLLSPY
+    function setupNavigationHighlight() {
+      const navLinks = document.querySelectorAll(".nav-link");
+      const mobileLinks = document.querySelectorAll(".mobile-nav-link");
+      const sections = document.querySelectorAll("section[id]");
+
+      function setActiveLink(id) {
+        navLinks.forEach(link => {
+          if (link.getAttribute("href") === "#" + id) {
+            link.className = "nav-link text-red-900 font-bold border-b-2 border-red-900 py-1 transition";
+          } else {
+            link.className = "nav-link text-gray-700 hover:text-red-900 py-1 transition";
+          }
+        });
+        mobileLinks.forEach(link => {
+          if (link.getAttribute("href") === "#" + id) {
+            link.className = "mobile-nav-link block py-2 text-red-900 font-bold";
+          } else {
+            link.className = "mobile-nav-link block py-2 text-gray-700 hover:text-red-900";
+          }
+        });
+      }
+
+      window.addEventListener("scroll", () => {
+        let current = "";
+        const scrollY = window.pageYOffset;
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 130;
+          const sectionHeight = section.offsetHeight;
+          if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+            current = section.getAttribute("id");
+          }
+        });
+        if (current) {
+          setActiveLink(current);
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener("click", function() {
+          const targetId = this.getAttribute("href").replace("#", "");
+          setActiveLink(targetId);
+        });
+      });
+
+      mobileLinks.forEach(link => {
+        link.addEventListener("click", function() {
+          const targetId = this.getAttribute("href").replace("#", "");
+          setActiveLink(targetId);
+          const m = document.getElementById("mobile-menu");
+          if (m) m.classList.add("hidden");
+        });
+      });
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       updateAdminStatusUI();
+      setupNavigationHighlight();
       const pass = document.getElementById("login-password");
       if (pass) {
         pass.addEventListener("keypress", (e) => {
@@ -715,6 +832,6 @@
     });
   </script>
 
-  <script src="app.js?v=2026.13"></script>
+  <script src="app.js?v=2026.14"></script>
 </body>
 </html>
