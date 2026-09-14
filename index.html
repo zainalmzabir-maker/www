@@ -40,15 +40,16 @@
         </div>
       </div>
 
-      <div class="hidden lg:flex items-center space-x-6 text-sm font-medium text-gray-700">
-        <a href="#utama" class="hover:text-red-900 transition py-1">Utama</a>
-        <a href="#pengumuman" class="hover:text-red-900 transition py-1">Pengumuman</a>
-        <a href="#profil" class="hover:text-red-900 transition py-1">Profil</a>
-        <a href="#pentadbiran" class="hover:text-red-900 transition py-1">Pengurusan 2026</a>
-        <a href="#bidang" class="hover:text-red-900 transition py-1">Kurikulum & HEM</a>
-        <a href="#kokurikulum" class="hover:text-red-900 transition py-1">Kokurikulum</a>
-        <a href="#takwim" class="hover:text-red-900 transition py-1">Takwim</a>
-        <a href="#hubungi" class="bg-red-900 text-white px-4 py-2 rounded-lg hover:bg-red-800 transition">Hubungi</a>
+      <!-- DESKTOP NAVIGATION -->
+      <div id="desktop-menu" class="hidden lg:flex items-center space-x-6 text-sm font-medium text-gray-700">
+        <a href="#utama" class="nav-link text-red-900 font-bold border-b-2 border-red-900 py-1 transition">Utama</a>
+        <a href="#pengumuman" class="nav-link text-gray-700 hover:text-red-900 py-1 transition">Pengumuman</a>
+        <a href="#profil" class="nav-link text-gray-700 hover:text-red-900 py-1 transition">Profil</a>
+        <a href="#pentadbiran" class="nav-link text-gray-700 hover:text-red-900 py-1 transition">Pengurusan 2026</a>
+        <a href="#bidang" class="nav-link text-gray-700 hover:text-red-900 py-1 transition">Kurikulum & HEM</a>
+        <a href="#kokurikulum" class="nav-link text-gray-700 hover:text-red-900 py-1 transition">Kokurikulum</a>
+        <a href="#takwim" class="nav-link text-gray-700 hover:text-red-900 py-1 transition">Takwim</a>
+        <a href="#hubungi" class="nav-link text-gray-700 hover:text-red-900 py-1 transition">Hubungi</a>
       </div>
 
       <button id="mobile-menu-btn" type="button" onclick="toggleMobileMenu()" class="lg:hidden text-gray-700 hover:text-red-900 p-2 cursor-pointer">
@@ -56,15 +57,16 @@
       </button>
     </div>
 
+    <!-- MOBILE NAVIGATION -->
     <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 pt-2 pb-4 space-y-2 text-sm font-medium">
-      <a href="#utama" class="block py-2 text-gray-700">Utama</a>
-      <a href="#pengumuman" class="block py-2 text-gray-700">Pengumuman</a>
-      <a href="#profil" class="block py-2 text-gray-700">Profil</a>
-      <a href="#pentadbiran" class="block py-2 text-gray-700">Pengurusan 2026</a>
-      <a href="#bidang" class="block py-2 text-gray-700">Kurikulum & HEM</a>
-      <a href="#kokurikulum" class="block py-2 text-gray-700">Kokurikulum</a>
-      <a href="#takwim" class="block py-2 text-gray-700">Takwim</a>
-      <a href="#hubungi" class="block py-2 text-red-900 font-bold">Hubungi Kami</a>
+      <a href="#utama" class="mobile-nav-link block py-2 text-red-900 font-bold">Utama</a>
+      <a href="#pengumuman" class="mobile-nav-link block py-2 text-gray-700 hover:text-red-900">Pengumuman</a>
+      <a href="#profil" class="mobile-nav-link block py-2 text-gray-700 hover:text-red-900">Profil</a>
+      <a href="#pentadbiran" class="mobile-nav-link block py-2 text-gray-700 hover:text-red-900">Pengurusan 2026</a>
+      <a href="#bidang" class="mobile-nav-link block py-2 text-gray-700 hover:text-red-900">Kurikulum & HEM</a>
+      <a href="#kokurikulum" class="mobile-nav-link block py-2 text-gray-700 hover:text-red-900">Kokurikulum</a>
+      <a href="#takwim" class="mobile-nav-link block py-2 text-gray-700 hover:text-red-900">Takwim</a>
+      <a href="#hubungi" class="mobile-nav-link block py-2 text-gray-700 hover:text-red-900">Hubungi Kami</a>
       <button type="button" onclick="openLoginModal()" class="w-full text-left py-2 text-yellow-600 font-bold border-t cursor-pointer">Admin Login</button>
     </div>
   </nav>
@@ -228,9 +230,9 @@
       </div>
     </div>
 
-    <!-- CARIAN GURU (3 LAJUR SAHAJA: BIL, NAMA, JAWATAN) -->
+    <!-- CARIAN GURU LIVE DARI GOOGLE SHEETS (CENTER-ALIGNED) -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-      <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+      <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 text-center sm:text-left">
         <div>
           <h4 class="font-bold text-base text-gray-900">Senarai Guru & Kakitangan 2026</h4>
           <p class="text-xs text-gray-500">Data disegerakkan dari sheet tab 'Guru'</p>
@@ -242,12 +244,12 @@
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-gray-700">
+        <table class="w-full text-center text-xs text-gray-700 mx-auto">
           <thead class="bg-red-950 text-white font-semibold">
             <tr>
-              <th class="p-3 w-16">Bil</th>
-              <th class="p-3">Nama Penuh</th>
-              <th class="p-3">Jawatan / Panitia</th>
+              <th class="p-3 w-20 text-center">Bil</th>
+              <th class="p-3 text-center">Nama Penuh</th>
+              <th class="p-3 text-center">Jawatan / Panitia</th>
             </tr>
           </thead>
           <tbody id="teachers-table-body" class="divide-y divide-gray-200">
@@ -258,7 +260,7 @@
     </div>
   </section>
 
-  <!-- KURIKULUM & HEM -->
+  <!-- KURIKULUM & HEM OVERVIEW -->
   <section id="bidang" class="py-16 bg-gray-100/70 px-4 sm:px-8 border-t border-gray-200">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-10">
@@ -268,10 +270,10 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <h4 class="font-bold text-base text-red-950 mb-3 flex items-center">
+          <h4 class="font-bold text-base text-red-950 mb-3 flex items-center justify-center sm:justify-start">
             <i class="fa-solid fa-book-open-reader mr-2 text-yellow-600"></i> Fokus Kurikulum 2026
           </h4>
-          <ul class="space-y-2 text-xs text-gray-600">
+          <ul class="space-y-2 text-xs text-gray-600 text-left">
             <li><i class="fa-solid fa-check text-green-600 mr-1.5"></i> Pembudayaan Pembelajaran Abad Ke-21 (PAK21) & KBAT.</li>
             <li><i class="fa-solid fa-check text-green-600 mr-1.5"></i> Program Transformasi Sekolah 2025 (TS25) Kohort Khas.</li>
             <li><i class="fa-solid fa-check text-green-600 mr-1.5"></i> Pentaksiran Bilik Darjah (PBD) & Program Gemilang SPM 2026.</li>
@@ -279,10 +281,10 @@
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <h4 class="font-bold text-base text-red-950 mb-3 flex items-center">
+          <h4 class="font-bold text-base text-red-950 mb-3 flex items-center justify-center sm:justify-start">
             <i class="fa-solid fa-users-gear mr-2 text-yellow-600"></i> Fokus Sahsiah & Disiplin
           </h4>
-          <ul class="space-y-2 text-xs text-gray-600">
+          <ul class="space-y-2 text-xs text-gray-600 text-left">
             <li><i class="fa-solid fa-check text-green-600 mr-1.5"></i> Amalan Karakter Murid Johor (KrMJ) & Budaya 3S (Senyum, Sapa, Salam).</li>
             <li><i class="fa-solid fa-check text-green-600 mr-1.5"></i> Skim Pinjaman Buku Teks (SPBT) dan Bantuan Pelajaran (BAP/KWAPM).</li>
             <li><i class="fa-solid fa-check text-green-600 mr-1.5"></i> Program Minda Sihat & Sekolah Penyayang (Unit Kaunseling).</li>
@@ -328,7 +330,7 @@
     </div>
   </section>
 
-  <!-- TAKWIM -->
+  <!-- TAKWIM PERSEKOLAHAN DARI GOOGLE SHEETS -->
   <section id="takwim" class="py-16 bg-white px-4 sm:px-8 border-t border-gray-200">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-10">
@@ -338,13 +340,13 @@
       </div>
 
       <div class="overflow-x-auto shadow-sm rounded-xl border border-gray-200">
-        <table class="w-full text-left text-xs text-gray-700">
+        <table class="w-full text-center text-xs text-gray-700 mx-auto">
           <thead class="bg-gray-100 text-gray-800 font-bold">
             <tr>
-              <th class="p-3">Tarikh</th>
-              <th class="p-3">Aktiviti / Program</th>
-              <th class="p-3">Kategori</th>
-              <th class="p-3">Tindakan / Sasaran</th>
+              <th class="p-3 text-center">Tarikh</th>
+              <th class="p-3 text-center">Aktiviti / Program</th>
+              <th class="p-3 text-center">Kategori</th>
+              <th class="p-3 text-center">Tindakan / Sasaran</th>
             </tr>
           </thead>
           <tbody id="takwim-table-body" class="divide-y divide-gray-200">
@@ -426,7 +428,7 @@
     </div>
   </div>
 
-  <!-- ================= PANEL ADMIN ================= -->
+  <!-- ================= PANEL ADMIN / KEMAS KINI DATA ================= -->
   <div id="admin-panel-modal" style="display: none;" class="fixed inset-0 bg-black/75 z-50 items-center justify-center p-4 overflow-y-auto">
     <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6 relative my-8">
       <div class="flex justify-between items-center border-b pb-4 mb-4">
@@ -636,8 +638,64 @@
       if (m) m.classList.toggle("hidden");
     }
 
+    // SCROLLSPY & ACTIVE MENU HIGHLIGHT
+    function setupNavigationHighlight() {
+      const navLinks = document.querySelectorAll(".nav-link");
+      const mobileLinks = document.querySelectorAll(".mobile-nav-link");
+      const sections = document.querySelectorAll("section[id]");
+
+      function setActiveLink(id) {
+        navLinks.forEach(link => {
+          if (link.getAttribute("href") === "#" + id) {
+            link.className = "nav-link text-red-900 font-bold border-b-2 border-red-900 py-1 transition";
+          } else {
+            link.className = "nav-link text-gray-700 hover:text-red-900 py-1 transition";
+          }
+        });
+        mobileLinks.forEach(link => {
+          if (link.getAttribute("href") === "#" + id) {
+            link.className = "mobile-nav-link block py-2 text-red-900 font-bold";
+          } else {
+            link.className = "mobile-nav-link block py-2 text-gray-700 hover:text-red-900";
+          }
+        });
+      }
+
+      window.addEventListener("scroll", () => {
+        let current = "";
+        const scrollY = window.pageYOffset;
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 120;
+          const sectionHeight = section.offsetHeight;
+          if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+            current = section.getAttribute("id");
+          }
+        });
+        if (current) {
+          setActiveLink(current);
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener("click", function() {
+          const targetId = this.getAttribute("href").replace("#", "");
+          setActiveLink(targetId);
+        });
+      });
+
+      mobileLinks.forEach(link => {
+        link.addEventListener("click", function() {
+          const targetId = this.getAttribute("href").replace("#", "");
+          setActiveLink(targetId);
+          const m = document.getElementById("mobile-menu");
+          if (m) m.classList.add("hidden");
+        });
+      });
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       updateAdminStatusUI();
+      setupNavigationHighlight();
       const pass = document.getElementById("login-password");
       if (pass) {
         pass.addEventListener("keypress", (e) => {
@@ -647,6 +705,6 @@
     });
   </script>
 
-  <script src="app.js?v=2026.8"></script>
+  <script src="app.js?v=2026.9"></script>
 </body>
 </html>
