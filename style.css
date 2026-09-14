@@ -1,0 +1,42 @@
+/* Gaya Khas & Tema SEMEKAR */
+:root {
+  --semekar-red: #581014;
+  --semekar-dark: #370a0d;
+  --semekar-gold: #eab308;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Latar Belakang Hero */
+.hero-pattern {
+  background: linear-gradient(135deg, rgba(88, 16, 20, 0.95), rgba(30, 10, 15, 0.95)),
+              repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 1px, transparent 0, transparent 50%);
+  background-size: cover;
+}
+
+/* Table Styling */
+table thead th {
+  letter-spacing: 0.05em;
+}
+
+tbody tr:hover {
+  background-color: rgba(254, 242, 242, 0.5);
+}
+
+/* Scrollbar ringkas */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #881337;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4c0519;
+}
