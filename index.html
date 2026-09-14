@@ -4,11 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal Rasmi SMK Kamarul Ariffin (SEMEKAR)</title>
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans antialiased">
@@ -40,39 +37,32 @@
         </div>
       </div>
 
-      <!-- Desktop Menu -->
       <div class="hidden lg:flex items-center space-x-6 text-sm font-medium text-gray-700">
         <a href="#utama" class="hover:text-red-900 transition py-1">Utama</a>
         <a href="#pengumuman" class="hover:text-red-900 transition py-1">Pengumuman</a>
         <a href="#profil" class="hover:text-red-900 transition py-1">Profil</a>
         <a href="#pentadbiran" class="hover:text-red-900 transition py-1">Pengurusan 2026</a>
-        <a href="#kurikulum" class="hover:text-red-900 transition py-1">Kurikulum</a>
-        <a href="#kokurikulum" class="hover:text-red-900 transition py-1">Kokurikulum</a>
         <a href="#takwim" class="hover:text-red-900 transition py-1">Takwim</a>
         <a href="#hubungi" class="bg-red-900 text-white px-4 py-2 rounded-lg hover:bg-red-800 transition">Hubungi</a>
       </div>
 
-      <!-- Mobile Hamburger Button -->
       <button id="mobile-menu-btn" class="lg:hidden text-gray-700 hover:text-red-900 focus:outline-none p-2">
         <i class="fa-solid fa-bars text-2xl"></i>
       </button>
     </div>
 
-    <!-- Mobile Menu Dropdown -->
     <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-gray-100 px-4 pt-2 pb-4 space-y-2 text-sm font-medium">
       <a href="#utama" class="block py-2 text-gray-700 hover:text-red-900">Utama</a>
       <a href="#pengumuman" class="block py-2 text-gray-700 hover:text-red-900">Pengumuman</a>
       <a href="#profil" class="block py-2 text-gray-700 hover:text-red-900">Profil</a>
       <a href="#pentadbiran" class="block py-2 text-gray-700 hover:text-red-900">Pengurusan 2026</a>
-      <a href="#kurikulum" class="block py-2 text-gray-700 hover:text-red-900">Kurikulum</a>
-      <a href="#kokurikulum" class="block py-2 text-gray-700 hover:text-red-900">Kokurikulum</a>
       <a href="#takwim" class="block py-2 text-gray-700 hover:text-red-900">Takwim</a>
       <a href="#hubungi" class="block py-2 text-red-900 font-bold">Hubungi Kami</a>
     </div>
   </nav>
 
   <!-- HERO SECTION -->
-  <section id="utama" class="hero-pattern relative text-white py-24 px-4 sm:px-8">
+  <section id="utama" class="hero-pattern relative text-white py-20 px-4 sm:px-8">
     <div class="max-w-5xl mx-auto text-center relative z-10">
       <span class="inline-block bg-yellow-500 text-red-950 font-bold text-xs uppercase px-3 py-1 rounded-full mb-4 shadow">
         Portal Rasmi Sekolah
@@ -80,12 +70,12 @@
       <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
         Selamat Datang ke SMK Kamarul Ariffin
       </h2>
-      <p class="text-base sm:text-xl text-red-100 max-w-3xl mx-auto mb-8 leading-relaxed">
-        "Kesungguhan Kunci Kecemerlangan" — Membina generasi berilmu, berakhlak mulia, dan berdaya saing global berpaksikan Aspirasi Pendidikan Johor & Malaysia Madani.
+      <p class="text-base sm:text-lg text-red-100 max-w-3xl mx-auto mb-8 leading-relaxed">
+        "Kesungguhan Kunci Kecemerlangan" — Komited melahirkan insan berkualiti melalui pemantapan kurikulum, sahsiah terpuji, dan kebitaraan kokurikulum.
       </p>
       <div class="flex flex-wrap justify-center gap-4">
-        <a href="#pengumuman" class="bg-yellow-500 hover:bg-yellow-400 text-red-950 font-bold px-6 py-3 rounded-lg shadow-lg transition">
-          <i class="fa-solid fa-bullhorn mr-2"></i> Pengumuman Terkini
+        <a href="#pengumuman" class="bg-yellow-500 hover:bg-yellow-400 text-red-950 font-bold px-6 py-3 rounded-lg shadow transition">
+          <i class="fa-solid fa-bullhorn mr-2"></i> Pengumuman
         </a>
         <a href="#takwim" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold px-6 py-3 rounded-lg backdrop-blur-sm transition">
           <i class="fa-solid fa-calendar-days mr-2"></i> Takwim Persekolahan
@@ -94,19 +84,19 @@
     </div>
   </section>
 
-  <!-- STATUS CMS BADGE -->
+  <!-- STATUS CMS LIVE BADGE -->
   <div class="max-w-7xl mx-auto px-4 sm:px-8 -mt-6 relative z-20">
-    <div class="bg-white rounded-xl shadow-md p-4 flex flex-wrap items-center justify-between gap-4 border border-gray-100">
+    <div class="bg-white rounded-xl shadow p-4 flex flex-wrap items-center justify-between gap-4 border border-gray-200">
       <div class="flex items-center space-x-3">
         <span class="relative flex h-3 w-3">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
         </span>
-        <span class="text-xs font-semibold text-gray-600" id="cms-status">
-          Data Disegerakkan dari Google Sheets (Cloud CMS)
+        <span class="text-xs text-gray-600" id="cms-status">
+          Menyambung ke Google Sheets (ID: 1fF_ErzTl...)...
         </span>
       </div>
-      <div class="text-xs text-gray-500" id="last-updated">
+      <div class="text-xs text-gray-500 font-mono" id="last-updated">
         Terkini: Sesi Persekolahan 2026
       </div>
     </div>
@@ -114,131 +104,104 @@
 
   <!-- PENGUMUMAN DARI GOOGLE SHEETS -->
   <section id="pengumuman" class="py-16 px-4 sm:px-8 max-w-7xl mx-auto">
-    <div class="text-center mb-12">
-      <h3 class="text-2xl sm:text-3xl font-bold text-red-950">Pengumuman & Hebahan Terkini</h3>
+    <div class="text-center mb-10">
+      <h3 class="text-2xl sm:text-3xl font-bold text-red-950">Hebahan & Pengumuman</h3>
       <div class="w-16 h-1 bg-yellow-500 mx-auto mt-2 rounded"></div>
-      <p class="text-gray-600 text-sm mt-2">Maklumat yang dikemas kini terus oleh pihak pengurusan melalui Google Sheets.</p>
+      <p class="text-gray-600 text-xs mt-2">Kandungan dikemas kini secara terus melalui Google Sheet sekolah.</p>
     </div>
 
-    <!-- Container Card Pengumuman -->
     <div id="announcement-container" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="col-span-full text-center py-8 text-gray-500">
-        <i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-red-900"></i>
-        <p>Memuatkan data terkini dari Google Sheets...</p>
+      <div class="col-span-full text-center py-10 text-gray-400 text-xs">
+        <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-red-900"></i>
+        <p>Memuatkan hebahan...</p>
       </div>
     </div>
   </section>
 
   <!-- PROFIL SEKOLAH -->
-  <section id="profil" class="py-16 bg-red-50/50 px-4 sm:px-8 border-y border-red-100">
+  <section id="profil" class="py-16 bg-red-50/40 px-4 sm:px-8 border-y border-red-100">
     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-12">
-        <h3 class="text-2xl sm:text-3xl font-bold text-red-950">Profil SMK Kamarul Ariffin</h3>
+      <div class="text-center mb-10">
+        <h3 class="text-2xl sm:text-3xl font-bold text-red-950">Profil Sekolah</h3>
         <div class="w-16 h-1 bg-yellow-500 mx-auto mt-2 rounded"></div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <div class="text-red-900 text-3xl mb-3"><i class="fa-solid fa-eye"></i></div>
-          <h4 class="font-bold text-lg text-gray-800 mb-2">Visi Sekolah</h4>
-          <p class="text-sm text-gray-600">Pendidikan Berkualiti Insan Terdidik Negara Sejahtera.</p>
+          <div class="text-red-900 text-2xl mb-3"><i class="fa-solid fa-eye"></i></div>
+          <h4 class="font-bold text-base text-gray-800 mb-1">Visi</h4>
+          <p class="text-xs text-gray-600 leading-relaxed">Pendidikan Berkualiti Insan Terdidik Negara Sejahtera.</p>
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <div class="text-red-900 text-3xl mb-3"><i class="fa-solid fa-bullseye"></i></div>
-          <h4 class="font-bold text-lg text-gray-800 mb-2">Misi Sekolah</h4>
-          <p class="text-sm text-gray-600">Melestarikan sistem pendidikan yang berkualiti untuk membangunkan potensi individu bagi memenuhi aspirasi negara.</p>
+          <div class="text-red-900 text-2xl mb-3"><i class="fa-solid fa-bullseye"></i></div>
+          <h4 class="font-bold text-base text-gray-800 mb-1">Misi</h4>
+          <p class="text-xs text-gray-600 leading-relaxed">Melestarikan sistem pendidikan yang berkualiti untuk membangunkan potensi individu bagi memenuhi aspirasi negara.</p>
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <div class="text-red-900 text-3xl mb-3"><i class="fa-solid fa-award"></i></div>
-          <h4 class="font-bold text-lg text-gray-800 mb-2">Kebitaraan & Etos</h4>
-          <p class="text-sm text-gray-600"><strong>Kebitaraan:</strong> Sukan Kriket<br><strong>Etos:</strong> Sekolah Lestari, Keunggulan Peribadi</p>
+          <div class="text-red-900 text-2xl mb-3"><i class="fa-solid fa-award"></i></div>
+          <h4 class="font-bold text-base text-gray-800 mb-1">Kebitaraan & Etos</h4>
+          <p class="text-xs text-gray-600 leading-relaxed"><strong>Kebitaraan:</strong> Sukan Kriket<br><strong>Etos:</strong> Sekolah Lestari, Keunggulan Peribadi</p>
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-          <div class="text-red-900 text-3xl mb-3"><i class="fa-solid fa-circle-info"></i></div>
-          <h4 class="font-bold text-lg text-gray-800 mb-2">Profil Ringkas</h4>
-          <p class="text-sm text-gray-600"><strong>Gred:</strong> B (Luar Bandar)<br><strong>Sesi:</strong> Pagi Sahaja<br><strong>Peringkat:</strong> Menengah Rendah & Atas</p>
+          <div class="text-red-900 text-2xl mb-3"><i class="fa-solid fa-school"></i></div>
+          <h4 class="font-bold text-base text-gray-800 mb-1">Maklumat Am</h4>
+          <p class="text-xs text-gray-600 leading-relaxed"><strong>Kod:</strong> JEA7039 | <strong>Gred:</strong> B<br><strong>Sesi:</strong> Pagi (Men. Rendah & Atas)</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PENGURUSAN & PENTADBIRAN (TERKINI SESI 2026) -->
+  <!-- PENGURUSAN 2026 -->
   <section id="pentadbiran" class="py-16 px-4 sm:px-8 max-w-7xl mx-auto">
-    <div class="text-center mb-12">
-      <h3 class="text-2xl sm:text-3xl font-bold text-red-950">Barisan Pentadbir & Guru Kanan 2026</h3>
+    <div class="text-center mb-10">
+      <h3 class="text-2xl sm:text-3xl font-bold text-red-950">Barisan Pentadbir Utama 2026</h3>
       <div class="w-16 h-1 bg-yellow-500 mx-auto mt-2 rounded"></div>
-      <p class="text-gray-600 text-sm mt-2">Disediakan berdasarkan Buku Panduan Pengurusan SEMEKAR 2026</p>
+      <p class="text-gray-600 text-xs mt-2">Buku Panduan Pengurusan Sesi Persekolahan 2026</p>
     </div>
 
-    <!-- PENTADBIR UTAMA (4 GURU BESAR/PK) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-      <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-red-900 hover:shadow-md transition">
-        <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-red-950 text-3xl mb-4 border-2 border-red-200">
+      <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-red-900 border-x border-b border-gray-200">
+        <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-red-950 text-2xl mb-3 border">
           <i class="fa-solid fa-user-tie"></i>
         </div>
-        <h4 class="font-bold text-base text-gray-900">Cikgu Abd Hadi bin Adman</h4>
-        <p class="text-xs text-red-900 font-semibold uppercase tracking-wider mt-1">Pengetua</p>
-        <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded mt-2">Pengerusi Sekolah</span>
+        <h4 class="font-bold text-sm text-gray-900">Cikgu Abd Hadi bin Adman</h4>
+        <p class="text-[11px] text-red-900 font-semibold uppercase mt-1">Pengetua</p>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-blue-900 hover:shadow-md transition">
-        <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-blue-950 text-3xl mb-4 border-2 border-blue-200">
+      <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-blue-900 border-x border-b border-gray-200">
+        <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-blue-950 text-2xl mb-3 border">
           <i class="fa-solid fa-user-tie"></i>
         </div>
-        <h4 class="font-bold text-base text-gray-900">Cikgu Masnon bin Amat</h4>
-        <p class="text-xs text-blue-900 font-semibold uppercase tracking-wider mt-1">GPK Pentadbiran</p>
-        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded mt-2">Pengurusan & Akademik</span>
+        <h4 class="font-bold text-sm text-gray-900">Cikgu Masnon bin Amat</h4>
+        <p class="text-[11px] text-blue-900 font-semibold uppercase mt-1">GPK Pentadbiran</p>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-amber-600 hover:shadow-md transition">
-        <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-amber-950 text-3xl mb-4 border-2 border-amber-200">
+      <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-amber-600 border-x border-b border-gray-200">
+        <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-amber-950 text-2xl mb-3 border">
           <i class="fa-solid fa-user-tie"></i>
         </div>
-        <h4 class="font-bold text-base text-gray-900">Cikgu Shamsinah binti Shamsudin</h4>
-        <p class="text-xs text-amber-800 font-semibold uppercase tracking-wider mt-1">GPK Hal Ehwal Murid</p>
-        <span class="inline-block bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded mt-2">Disiplin & Kebajikan</span>
+        <h4 class="font-bold text-sm text-gray-900">Cikgu Shamsinah binti Shamsudin</h4>
+        <p class="text-[11px] text-amber-800 font-semibold uppercase mt-1">GPK Hal Ehwal Murid</p>
       </div>
 
-      <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-emerald-700 hover:shadow-md transition">
-        <div class="w-20 h-20 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-emerald-950 text-3xl mb-4 border-2 border-emerald-200">
+      <div class="bg-white rounded-xl shadow-sm p-6 text-center border-t-4 border-emerald-700 border-x border-b border-gray-200">
+        <div class="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-emerald-950 text-2xl mb-3 border">
           <i class="fa-solid fa-user-tie"></i>
         </div>
-        <h4 class="font-bold text-base text-gray-900">Cikgu Zainal bin Mohd Zabir</h4>
-        <p class="text-xs text-emerald-800 font-semibold uppercase tracking-wider mt-1">GPK Kokurikulum</p>
-        <span class="inline-block bg-emerald-100 text-emerald-800 text-xs px-2 py-0.5 rounded mt-2">Sukan & Kokurikulum</span>
+        <h4 class="font-bold text-sm text-gray-900">Cikgu Zainal bin Mohd Zabir</h4>
+        <p class="text-[11px] text-emerald-800 font-semibold uppercase mt-1">GPK Kokurikulum</p>
       </div>
     </div>
 
-    <!-- GURU KANAN MATA PELAJARAN (GKMP) -->
-    <h4 class="text-center font-bold text-gray-700 mb-6 text-sm uppercase tracking-widest">Ketua-Ketua Bidang (GKMP)</h4>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      <div class="p-4 bg-gray-100 rounded-lg text-center">
-        <p class="text-xs text-gray-500 font-medium">GKMP Sains & Matematik</p>
-        <p class="font-semibold text-gray-900 text-sm mt-1">Cikgu Mohd Riduwan bin Mohd Yasan</p>
-      </div>
-      <div class="p-4 bg-gray-100 rounded-lg text-center">
-        <p class="text-xs text-gray-500 font-medium">GKMP Teknik & Vokasional</p>
-        <p class="font-semibold text-gray-900 text-sm mt-1">Cikgu Mohd Nizam bin Subani</p>
-      </div>
-      <div class="p-4 bg-gray-100 rounded-lg text-center">
-        <p class="text-xs text-gray-500 font-medium">GKMP Bahasa</p>
-        <p class="font-semibold text-gray-900 text-sm mt-1">Cikgu Rohana binti Jasmin</p>
-      </div>
-      <div class="p-4 bg-gray-100 rounded-lg text-center">
-        <p class="text-xs text-gray-500 font-medium">GKMP Sains Kemasyarakatan</p>
-        <p class="font-semibold text-gray-900 text-sm mt-1">Cikgu XY</p>
-      </div>
-    </div>
-
-    <!-- CARIAN STAF / GURU LIVE DARI GOOGLE SHEETS -->
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mt-10">
-      <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+    <!-- CARIAN GURU DARI GOOGLE SHEETS -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
         <div>
-          <h4 class="font-bold text-lg text-gray-900">Senarai Guru & Anggota Pelaksana (AKP) 2026</h4>
-          <p class="text-xs text-gray-500">Cari guru atau jawatan di bawah:</p>
+          <h4 class="font-bold text-base text-gray-900">Senarai Guru & Kakitangan 2026</h4>
+          <p class="text-xs text-gray-500">Data dikemaskini dari sheet tab 'Guru'</p>
         </div>
         <div class="relative w-full sm:w-64">
           <input type="text" id="teacher-search" placeholder="Cari nama atau jawatan..." class="w-full text-xs pl-8 pr-3 py-2 border rounded-lg focus:outline-none focus:border-red-900" />
@@ -248,7 +211,7 @@
 
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs text-gray-700">
-          <thead class="bg-red-950 text-white font-semibold uppercase">
+          <thead class="bg-red-950 text-white font-semibold">
             <tr>
               <th class="p-3">Bil</th>
               <th class="p-3">Nama Penuh</th>
@@ -257,7 +220,7 @@
             </tr>
           </thead>
           <tbody id="teachers-table-body" class="divide-y divide-gray-200">
-            <!-- Dynamic / Fallback list loaded via JS -->
+            <!-- Render JS -->
           </tbody>
         </table>
       </div>
@@ -267,10 +230,10 @@
   <!-- TAKWIM PERSEKOLAHAN DARI GOOGLE SHEETS -->
   <section id="takwim" class="py-16 bg-white px-4 sm:px-8 border-t border-gray-200">
     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-12">
+      <div class="text-center mb-10">
         <h3 class="text-2xl sm:text-3xl font-bold text-red-950">Takwim Aktiviti Sekolah 2026</h3>
         <div class="w-16 h-1 bg-yellow-500 mx-auto mt-2 rounded"></div>
-        <p class="text-gray-600 text-sm mt-2">Jadual aktiviti kurikulum, HEM, dan kokurikulum terkini.</p>
+        <p class="text-gray-600 text-xs mt-2">Data dikemaskini dari sheet tab 'Takwim'</p>
       </div>
 
       <div class="overflow-x-auto shadow-sm rounded-xl border border-gray-200">
@@ -284,7 +247,7 @@
             </tr>
           </thead>
           <tbody id="takwim-table-body" class="divide-y divide-gray-200">
-            <!-- Dynamic Loaded via JS -->
+            <!-- Render JS -->
           </tbody>
         </table>
       </div>
@@ -295,43 +258,30 @@
   <section id="hubungi" class="py-16 bg-gray-900 text-white px-4 sm:px-8">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
       <div>
-        <h3 class="text-2xl font-bold text-yellow-400 mb-4">SMK Kamarul Ariffin</h3>
-        <p class="text-gray-300 text-sm leading-relaxed mb-6">
-          Sekolah Menengah Kebangsaan Kamarul Ariffin sentiasa komited menyediakan ekosistem pendidikan yang kondusif, beretika, dan cemerlang untuk seluruh warganya.
+        <h3 class="text-2xl font-bold text-yellow-400 mb-3">SMK Kamarul Ariffin</h3>
+        <p class="text-gray-300 text-xs leading-relaxed mb-6">
+          Sekolah Menengah Kebangsaan Kamarul Ariffin, Jalan Tenang, 85300 Labis, Segamat, Johor Darul Ta'zim.
         </p>
-        <ul class="space-y-3 text-xs text-gray-300">
-          <li class="flex items-start space-x-3">
-            <i class="fa-solid fa-map-pin text-yellow-400 mt-1"></i>
-            <span>Jalan Tenang, 85300 Labis, Segamat, Johor Darul Ta'zim</span>
-          </li>
-          <li class="flex items-center space-x-3">
-            <i class="fa-solid fa-phone text-yellow-400"></i>
-            <span>07-9255793 (Pejabat) / 07-9251464 (Faks)</span>
-          </li>
-          <li class="flex items-center space-x-3">
-            <i class="fa-solid fa-envelope text-yellow-400"></i>
-            <span>jea7039@moe.edu.my</span>
-          </li>
-        </ul>
+        <div class="space-y-2 text-xs text-gray-300">
+          <p><i class="fa-solid fa-phone text-yellow-400 w-5"></i> 07-9255793 / 07-9251464 (Faks)</p>
+          <p><i class="fa-solid fa-envelope text-yellow-400 w-5"></i> jea7039@moe.edu.my</p>
+        </div>
       </div>
 
       <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
-        <h4 class="font-bold text-base text-white mb-4">Saluran Pertanyaan & Aduan</h4>
-        <form id="contact-form" class="space-y-4 text-xs">
+        <h4 class="font-bold text-sm text-white mb-3">Hubungi Pihak Sekolah</h4>
+        <form onsubmit="event.preventDefault(); alert('Terima kasih. Mesej anda telah dihantar.');" class="space-y-3 text-xs">
           <div>
-            <label class="block text-gray-400 mb-1">Nama Lengkap</label>
-            <input type="text" class="w-full bg-gray-700 text-white rounded p-2.5 focus:outline-none focus:border-yellow-400" required />
+            <input type="text" placeholder="Nama Lengkap" class="w-full bg-gray-700 text-white rounded p-2 focus:outline-none focus:border-yellow-400" required />
           </div>
           <div>
-            <label class="block text-gray-400 mb-1">Nombor Telefon / Emel</label>
-            <input type="text" class="w-full bg-gray-700 text-white rounded p-2.5 focus:outline-none focus:border-yellow-400" required />
+            <input type="text" placeholder="Nombor Telefon / Emel" class="w-full bg-gray-700 text-white rounded p-2 focus:outline-none focus:border-yellow-400" required />
           </div>
           <div>
-            <label class="block text-gray-400 mb-1">Mesej / Pertanyaan</label>
-            <textarea rows="3" class="w-full bg-gray-700 text-white rounded p-2.5 focus:outline-none focus:border-yellow-400" required></textarea>
+            <textarea rows="3" placeholder="Mesej atau pertanyaan..." class="w-full bg-gray-700 text-white rounded p-2 focus:outline-none focus:border-yellow-400" required></textarea>
           </div>
           <button type="submit" class="bg-yellow-500 hover:bg-yellow-400 text-red-950 font-bold px-4 py-2 rounded transition">
-            Hantar Mesej
+            Hantar
           </button>
         </form>
       </div>
@@ -341,10 +291,9 @@
   <!-- FOOTER -->
   <footer class="bg-black text-gray-500 text-xs py-6 px-4 text-center border-t border-gray-800">
     <p>&copy; 2026 SMK Kamarul Ariffin (SEMEKAR). Hak Cipta Terpelihara.</p>
-    <p class="mt-1">Dikuasakan oleh GitHub Pages & Google Sheets API</p>
+    <p class="mt-1 text-[10px]">Dikuasakan secara dinamik menggunakan Google Sheets API & GitHub Pages</p>
   </footer>
 
-  <!-- App Script -->
   <script src="app.js"></script>
 </body>
 </html>
