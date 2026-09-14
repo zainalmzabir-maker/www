@@ -107,6 +107,29 @@ try {
   }
 } catch (e) {}
 
+// =================== FUNGSI PEMBANTU TARIKH MALAYSIA ===================
+function formatTarikhMalaysia(tarikhStr) {
+  if (!tarikhStr) return "-";
+  
+  // Jika string mengandungi format ISO (ada 'T' atau 'Z' dari Google Sheets)
+  const date = new Date(tarikhStr);
+  if (!isNaN(date.getTime()) && (String(tarikhStr).includes("T") || String(tarikhStr).includes("Z"))) {
+    try {
+      return date.toLocaleDateString('ms-MY', {
+        timeZone: 'Asia/Kuala_Lumpur',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+    } catch (e) {
+      return tarikhStr;
+    }
+  }
+  
+  // Jika ia sudah berupa teks biasa (cth: "10 Januari 2026"), kekalkan
+  return tarikhStr;
+}
+
 // =================== PAPARAN PENGURUSAN ===================
 function renderPentadbirUI() {
   const roles = ["pengetua", "gpk1", "gpkhem", "gpkkoku"];
@@ -317,7 +340,7 @@ function renderTeachers(teachers) {
   }).join("");
 }
 
-// =================== PENGUMUMAN (DIKEMASKINI) ===================
+// =================== PENGUMUMAN (DENGAN FORMAT TARIKH MALAYSIA & SUSUNAN BILANGAN) ===================
 function renderAnnouncements(items) {
   const c = document.getElementById("announcement-container");
   if (!c) return;
@@ -348,12 +371,13 @@ function renderAnnouncements(items) {
 
   c.innerHTML = items.map((item) => {
     const cardWidthClass = (count === 1) ? "w-full max-w-md" : "w-full";
+    const formattedTarikh = formatTarikhMalaysia(item.tarikh);
 
     return `
       <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-red-900 border-x border-b border-gray-100 flex flex-col justify-between hover:shadow-md transition ${cardWidthClass}">
         <div>
           <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
-            <span><i class="fa-regular fa-calendar mr-1"></i> ${item.tarikh || "-"}</span>
+            <span><i class="fa-regular fa-calendar mr-1"></i> ${formattedTarikh}</span>
             <span class="bg-red-100 text-red-900 font-semibold px-2 py-0.5 rounded">${item.kategori || "Hebahan"}</span>
           </div>
           <h4 class="font-bold text-base text-gray-800 mb-2">${item.tajuk || "Pengumuman"}</h4>
@@ -369,7 +393,7 @@ function renderTakwim(events) {
   if (!tbody) return;
   tbody.innerHTML = events.map(e => `
     <tr class="hover:bg-gray-50 transition">
-      <td class="p-3 font-bold text-red-950 whitespace-nowrap text-center">${e.tarikh || "-"}</td>
+      <td class="p-3 font-bold text-red-950 whitespace-nowrap text-center">${formatTarikhMalaysia(e.tarikh) || "-"}</td>
       <td class="p-3 font-medium text-gray-800 text-center">${e.aktiviti || "-"}</td>
       <td class="p-3 text-center"><span class="bg-yellow-100 text-yellow-900 font-semibold px-2 py-0.5 rounded text-[11px]">${e.kategori || "Program"}</span></td>
       <td class="p-3 text-gray-600 text-center">${e.tindakan || "-"}</td>
