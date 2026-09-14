@@ -7,7 +7,6 @@ const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJ
 const CACHE_KEY_GURU = "semekar_guru_cache_v2";
 const CACHE_KEY_PENTADBIR = "semekar_pentadbir_cache_v2";
 
-// Data Asal Barisan Pentadbir 2026
 const DEFAULT_PENTADBIR = {
   pengetua: { id: "pengetua", jawatan: "Pengetua", nama: "Cikgu Abd Hadi bin Adman", gambar: "" },
   gpk1: { id: "gpk1", jawatan: "GPK Pentadbiran", nama: "Cikgu Masnon bin Amat", gambar: "" },
@@ -18,17 +17,13 @@ const DEFAULT_PENTADBIR = {
 let pentadbirData = { ...DEFAULT_PENTADBIR };
 let currentSelectedImageBase64 = "";
 
-// Semak cache pentadbir
 try {
   const cachedPentadbir = localStorage.getItem(CACHE_KEY_PENTADBIR);
   if (cachedPentadbir) {
     pentadbirData = JSON.parse(cachedPentadbir);
   }
-} catch (e) {
-  console.warn("Storage restricted", e);
-}
+} catch (e) {}
 
-// Senarai Guru Asal 2026 (Tanpa Gred)
 const FALLBACK_TEACHERS = [
   { no: 1, nama: "En. Abd Hadi bin Adman", jawatan: "Pengetua" },
   { no: 2, nama: "En. Masnon bin Amat", jawatan: "GPK Pentadbiran" },
@@ -67,19 +62,19 @@ const FALLBACK_ANNOUNCEMENTS = [
     tajuk: "Pendaftaran Sesi Persekolahan 2026",
     tarikh: "10 Januari 2026",
     kategori: "Penting",
-    kandungan: "Pendaftaran Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 di Dewan Semekar Hebat[cite: 1]."
+    kandungan: "Pendaftaran Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 di Dewan Semekar Hebat."
   },
   {
     tajuk: "Kejohanan Olahraga Tahunan Kali Ke-27",
     tarikh: "13 Februari 2026",
     kategori: "Kokurikulum",
-    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput hadir memeriahkan kejohanan[cite: 1]."
+    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput hadir memeriahkan kejohanan."
   },
   {
     tajuk: "Program Transformasi Sekolah (TS25)",
     tarikh: "Sesi 2026",
     kategori: "Akademik",
-    kandungan: "Pembudayaan amalan PAK21 dan kemahiran berfikir aras tinggi (KBAT) untuk seluruh warga pelajar[cite: 1]."
+    kandungan: "Pembudayaan amalan PAK21 dan kemahiran berfikir aras tinggi (KBAT) untuk seluruh warga pelajar."
   }
 ];
 
@@ -100,7 +95,7 @@ try {
   }
 } catch (e) {}
 
-// =================== PAPARAN BARISAN PENTADBIR ===================
+// =================== PENGURUSAN PAPARAN PENTADBIR ===================
 function renderPentadbirUI() {
   const roles = ["pengetua", "gpk1", "gpkhem", "gpkkoku"];
   roles.forEach(role => {
@@ -126,7 +121,6 @@ function renderPentadbirUI() {
   });
 }
 
-// Apabila admin menukar pilihan jawatan di panel admin
 function onPentadbirRoleSelect() {
   const roleSelect = document.getElementById("pentadbir-role");
   const nameInput = document.getElementById("pentadbir-name");
@@ -152,7 +146,6 @@ function onPentadbirRoleSelect() {
   }
 }
 
-// Membaca fail gambar & memampatkannya ke Base64 (Maksimum 400px)
 function previewPentadbirImage(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -184,7 +177,6 @@ function previewPentadbirImage(event) {
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Kualiti JPEG 0.7 untuk saiz ringan
       currentSelectedImageBase64 = canvas.toDataURL("image/jpeg", 0.7);
 
       const previewImg = document.getElementById("pentadbir-preview-img");
@@ -200,7 +192,6 @@ function previewPentadbirImage(event) {
   reader.readAsDataURL(file);
 }
 
-// Simpan Kemas Kini Pentadbir
 function submitPentadbirUpdate() {
   const roleSelect = document.getElementById("pentadbir-role");
   const nameInput = document.getElementById("pentadbir-name");
@@ -221,20 +212,18 @@ function submitPentadbirUpdate() {
     gambar: currentSelectedImageBase64
   };
 
-  // Simpan terus ke data setempat agar terpapar serta-merta
   pentadbirData[role] = payload;
   try {
     localStorage.setItem(CACHE_KEY_PENTADBIR, JSON.stringify(pentadbirData));
   } catch(e){}
   renderPentadbirUI();
 
-  // Hantar ke Google Sheets
   postDataToScript("updatePentadbir", payload, "btn-submit-pentadbir").then(() => {
     alert("Maklumat " + payload.jawatan + " berjaya dikemas kini!");
   });
 }
 
-// =================== JADUAL GURU (SUSUN KIRI KEMAS) ===================
+// =================== JADUAL GURU ===================
 function renderTeachers(teachers) {
   const tbody = document.getElementById("teachers-table-body");
   if (!tbody) return;
@@ -289,7 +278,7 @@ function renderTakwim(events) {
   `).join("");
 }
 
-// =================== PENGAMBILAN DATA GOOGLE SHEETS ===================
+// =================== AMBIL DATA (GET) ===================
 async function fetchGoogleData() {
   const statusEl = document.getElementById("cms-status");
   const lastUpdatedEl = document.getElementById("last-updated");
@@ -300,7 +289,6 @@ async function fetchGoogleData() {
 
     const data = await res.json();
     if (data.status === "success") {
-      // Pentadbir
       if (data.pentadbir && Array.isArray(data.pentadbir) && data.pentadbir.length > 0) {
         data.pentadbir.forEach(p => {
           if (p.id && pentadbirData[p.id]) {
@@ -314,12 +302,10 @@ async function fetchGoogleData() {
         renderPentadbirUI();
       }
 
-      // Pengumuman
       if (data.pengumuman && data.pengumuman.length > 0) {
         renderAnnouncements(data.pengumuman);
       }
 
-      // Guru
       if (data.guru && Array.isArray(data.guru) && data.guru.length > 0) {
         const validTeachers = data.guru.map((t, idx) => ({
           no: t.no || (idx + 1),
@@ -336,7 +322,6 @@ async function fetchGoogleData() {
         }
       }
 
-      // Takwim
       if (data.takwim && data.takwim.length > 0) {
         renderTakwim(data.takwim);
       }
@@ -356,7 +341,7 @@ async function fetchGoogleData() {
   }
 }
 
-// =================== POST DATA KE GOOGLE SHEET ===================
+// =================== POST DATA (POST) ===================
 async function postDataToScript(action, data, submitBtnId) {
   const statusEl = document.getElementById("admin-action-status");
   const btn = document.getElementById(submitBtnId);
@@ -471,7 +456,6 @@ function setupSearch() {
   });
 }
 
-// Inisialisasi awal
 document.addEventListener("DOMContentLoaded", () => {
   renderPentadbirUI();
   renderTeachers(allTeachersData);
