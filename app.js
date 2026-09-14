@@ -1,16 +1,15 @@
 /**
  * SEMEKAR Web App Engine
  * Portal Rasmi SMK Kamarul Ariffin
- * Endpoint: Google Apps Script Web App
  */
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJsneV6VGEqRbGnxHr1mpXpv2ihZUYcwSM6BFQvymaw36kIyZ1c3yhSw/exec";
 
-// Kredensial Log Masuk Admin
+// Kredensial Log Masuk Pentadbir
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "semekar@123";
 
-// Data Sandaran (Fallback Data) Sesi 2026
+// Data Sandaran Buku Pengurusan 2026
 const FALLBACK_TEACHERS = [
   { no: 1, nama: "En. Abd Hadi bin Adman", jawatan: "Pengetua", gred: "DG13" },
   { no: 2, nama: "En. Masnon bin Amat", jawatan: "GPK Pentadbiran", gred: "DG12" },
@@ -49,19 +48,19 @@ const FALLBACK_ANNOUNCEMENTS = [
     tajuk: "Pendaftaran Sesi Persekolahan 2026",
     tarikh: "10 Januari 2026",
     kategori: "Penting",
-    kandungan: "Pendaftaran pelajar Tingkatan 1 dan pengesahan pendaftaran semula bagi Tingkatan 2 hingga 5 berjalan lancar di Dewan Semekar Hebat."
+    kandungan: "Pendaftaran Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 diadakan di Dewan Semekar Hebat."
   },
   {
     tajuk: "Kejohanan Olahraga Tahunan Kali Ke-27",
     tarikh: "13 Februari 2026",
     kategori: "Kokurikulum",
-    kandungan: "Acara sukan tahunan melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Semua warga sekolah dijemput memeriahkan kejohanan."
+    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput memeriahkan acara."
   },
   {
-    tajuk: "Program Transformasi Sekolah (TS25) & Peluasan KBAT",
+    tajuk: "Program Transformasi Sekolah (TS25)",
     tarikh: "Sesi 2026",
     kategori: "Akademik",
-    kandungan: "Pembudayaan amalan PAK21 dan Kemahiran Berfikir Aras Tinggi (KBAT) ke arah kecemerlangan kemenjadian murid."
+    kandungan: "Pembudayaan amalan PAK21 dan kemahiran berfikir aras tinggi (KBAT) untuk seluruh warga pelajar."
   }
 ];
 
@@ -75,49 +74,30 @@ const FALLBACK_TAKWIM = [
 
 let allTeachersData = [...FALLBACK_TEACHERS];
 
-// =================== PENGESAHAN & KAWALAN ADMIN (WINDOW BINDING) ===================
-window.openLoginModal = function() {
+// =================== PENGENDALIAN MODAL & SESI ===================
+function showLoginModal() {
   const modal = document.getElementById("login-modal");
   const err = document.getElementById("login-error");
-  if (modal) modal.classList.remove("hidden");
+  if (modal) modal.style.display = "flex";
   if (err) err.classList.add("hidden");
-};
+}
 
-window.closeLoginModal = function() {
+function hideLoginModal() {
   const modal = document.getElementById("login-modal");
-  if (modal) modal.classList.add("hidden");
-};
+  if (modal) modal.style.display = "none";
+}
 
-window.handleLogin = function(e) {
-  if (e && e.preventDefault) e.preventDefault();
+function showAdminPanel() {
+  const panel = document.getElementById("admin-panel-modal");
+  if (panel) panel.style.display = "flex";
+}
 
-  const userInput = document.getElementById("login-username");
-  const passInput = document.getElementById("login-password");
-  const err = document.getElementById("login-error");
+function hideAdminPanel() {
+  const panel = document.getElementById("admin-panel-modal");
+  if (panel) panel.style.display = "none";
+}
 
-  const u = userInput ? userInput.value.trim().toLowerCase() : "";
-  const p = passInput ? passInput.value.trim() : "";
-
-  if (u === ADMIN_USER && p === ADMIN_PASS) {
-    sessionStorage.setItem("semekar_admin", "true");
-    window.closeLoginModal();
-    window.checkAdminSession();
-    window.openAdminPanel();
-    if (userInput) userInput.value = "";
-    if (passInput) passInput.value = "";
-  } else {
-    if (err) err.classList.remove("hidden");
-  }
-  return false;
-};
-
-window.handleLogout = function() {
-  sessionStorage.removeItem("semekar_admin");
-  window.closeAdminPanel();
-  window.checkAdminSession();
-};
-
-window.checkAdminSession = function() {
+function updateAdminUI() {
   const isAdmin = sessionStorage.getItem("semekar_admin") === "true";
   const btnAdmin = document.getElementById("admin-panel-btn");
   const navLoginBtn = document.getElementById("nav-login-btn");
@@ -126,51 +106,128 @@ window.checkAdminSession = function() {
     if (btnAdmin) btnAdmin.classList.remove("hidden");
     if (navLoginBtn) {
       navLoginBtn.innerHTML = `<i class="fa-solid fa-user-check mr-1"></i> Admin Aktif`;
-      navLoginBtn.onclick = window.openAdminPanel;
+      navLoginBtn.onclick = showAdminPanel;
     }
   } else {
     if (btnAdmin) btnAdmin.classList.add("hidden");
     if (navLoginBtn) {
       navLoginBtn.innerHTML = `<i class="fa-solid fa-lock mr-1"></i> Admin Login`;
-      navLoginBtn.onclick = window.openLoginModal;
+      navLoginBtn.onclick = showLoginModal;
     }
   }
-};
+}
 
-window.openAdminPanel = function() {
-  const panel = document.getElementById("admin-panel-modal");
-  if (panel) panel.classList.remove("hidden");
-};
+// =================== PERISTIWA DOM ===================
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Butang Login Navigasi
+  const navLoginBtn = document.getElementById("nav-login-btn");
+  if (navLoginBtn) navLoginBtn.onclick = showLoginModal;
 
-window.closeAdminPanel = function() {
-  const panel = document.getElementById("admin-panel-modal");
-  if (panel) panel.classList.add("hidden");
-};
+  const mobileLoginBtn = document.getElementById("mobile-login-btn");
+  if (mobileLoginBtn) {
+    mobileLoginBtn.onclick = () => {
+      showLoginModal();
+      const menu = document.getElementById("mobile-menu");
+      if (menu) menu.classList.add("hidden");
+    };
+  }
 
-window.switchAdminTab = function(tabId) {
-  const tabs = ["tab-pengumuman", "tab-takwim", "tab-guru"];
-  const forms = ["form-add-pengumuman", "form-add-takwim", "form-add-guru"];
+  // 2. Butang Tutup Modal
+  const closeLoginBtn = document.getElementById("close-login-btn");
+  if (closeLoginBtn) closeLoginBtn.onclick = hideLoginModal;
 
-  tabs.forEach((t, i) => {
-    const btn = document.getElementById("btn-" + t);
-    const form = document.getElementById(forms[i]);
+  const closePanelBtn = document.getElementById("close-panel-btn");
+  if (closePanelBtn) closePanelBtn.onclick = hideAdminPanel;
 
-    if (btn && form) {
-      if (t === tabId) {
-        btn.className = "py-2 px-4 font-bold border-b-2 border-red-900 text-red-900";
-        form.classList.remove("hidden");
+  // 3. Butang Panel Admin & Logout
+  const adminPanelBtn = document.getElementById("admin-panel-btn");
+  if (adminPanelBtn) adminPanelBtn.onclick = showAdminPanel;
+
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.onclick = () => {
+      sessionStorage.removeItem("semekar_admin");
+      hideAdminPanel();
+      updateAdminUI();
+    };
+  }
+
+  // 4. Form Log Masuk
+  const loginForm = document.getElementById("admin-login-form");
+  if (loginForm) {
+    loginForm.onsubmit = (e) => {
+      e.preventDefault();
+      const u = document.getElementById("login-username").value.trim().toLowerCase();
+      const p = document.getElementById("login-password").value.trim();
+      const err = document.getElementById("login-error");
+
+      if (u === ADMIN_USER && p === ADMIN_PASS) {
+        sessionStorage.setItem("semekar_admin", "true");
+        hideLoginModal();
+        updateAdminUI();
+        showAdminPanel();
+        loginForm.reset();
       } else {
-        btn.className = "py-2 px-4 font-semibold text-gray-500 hover:text-red-900";
-        form.classList.add("hidden");
+        if (err) err.classList.remove("hidden");
       }
+    };
+  }
+
+  // 5. Penukaran Tab Admin
+  setupAdminTabs();
+
+  // 6. Form Submission Admin
+  setupAdminForms();
+
+  // 7. Carian & Menu Mobile
+  setupSearch();
+  setupMobileMenu();
+
+  // 8. Muat Data
+  updateAdminUI();
+  fetchGoogleData();
+});
+
+function setupMobileMenu() {
+  const btn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  if (btn && menu) {
+    btn.onclick = () => menu.classList.toggle("hidden");
+  }
+}
+
+function setupAdminTabs() {
+  const tabs = [
+    { btn: "btn-tab-pengumuman", form: "form-add-pengumuman" },
+    { btn: "btn-tab-takwim", form: "form-add-takwim" },
+    { btn: "btn-tab-guru", form: "form-add-guru" }
+  ];
+
+  tabs.forEach(t => {
+    const btnEl = document.getElementById(t.btn);
+    if (btnEl) {
+      btnEl.onclick = () => {
+        tabs.forEach(item => {
+          const b = document.getElementById(item.btn);
+          const f = document.getElementById(item.form);
+          if (b && f) {
+            if (item.btn === t.btn) {
+              b.className = "py-2 px-4 font-bold border-b-2 border-red-900 text-red-900 cursor-pointer";
+              f.style.display = "block";
+            } else {
+              b.className = "py-2 px-4 font-semibold text-gray-500 hover:text-red-900 cursor-pointer";
+              f.style.display = "none";
+            }
+          }
+        });
+        const statusEl = document.getElementById("admin-action-status");
+        if (statusEl) statusEl.classList.add("hidden");
+      };
     }
   });
+}
 
-  const statusEl = document.getElementById("admin-action-status");
-  if (statusEl) statusEl.classList.add("hidden");
-};
-
-// =================== PENGHANTARAN DATA (POST) ===================
+// =================== PENGHANTARAN POST KE APPS SCRIPT ===================
 async function postDataToScript(action, data, submitBtnId) {
   const statusEl = document.getElementById("admin-action-status");
   const btn = document.getElementById(submitBtnId);
@@ -183,7 +240,7 @@ async function postDataToScript(action, data, submitBtnId) {
 
   if (statusEl) {
     statusEl.className = "mt-4 text-xs font-semibold text-blue-600 block";
-    statusEl.textContent = "Sedang menghantar data ke Google Sheet...";
+    statusEl.textContent = "Menghantar rekod ke Google Sheet...";
     statusEl.classList.remove("hidden");
   }
 
@@ -198,11 +255,11 @@ async function postDataToScript(action, data, submitBtnId) {
     if (result.status === "success") {
       if (statusEl) {
         statusEl.className = "mt-4 text-xs font-semibold text-emerald-600 block";
-        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Rekod berjaya disimpan ke Google Sheet!`;
+        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Berjaya disimpan ke Google Sheet!`;
       }
       fetchGoogleData();
     } else {
-      throw new Error(result.message || "Ralat pelayan");
+      throw new Error(result.message || "Gagal menyimpan");
     }
   } catch (err) {
     if (statusEl) {
@@ -217,99 +274,65 @@ async function postDataToScript(action, data, submitBtnId) {
   }
 }
 
-window.submitNewPengumuman = function(e) {
-  if (e && e.preventDefault) e.preventDefault();
-  const titleEl = document.getElementById("ann-title");
-  const dateEl = document.getElementById("ann-date");
-  const catEl = document.getElementById("ann-cat");
-  const descEl = document.getElementById("ann-desc");
+function setupAdminForms() {
+  const fAnn = document.getElementById("form-add-pengumuman");
+  if (fAnn) {
+    fAnn.onsubmit = (e) => {
+      e.preventDefault();
+      const payload = {
+        tajuk: document.getElementById("ann-title").value.trim(),
+        tarikh: document.getElementById("ann-date").value.trim(),
+        kategori: document.getElementById("ann-cat").value.trim(),
+        kandungan: document.getElementById("ann-desc").value.trim()
+      };
+      postDataToScript("addPengumuman", payload, "btn-submit-ann").then(() => fAnn.reset());
+    };
+  }
 
-  const data = {
-    tajuk: titleEl ? titleEl.value.trim() : "",
-    tarikh: dateEl ? dateEl.value.trim() : "",
-    kategori: catEl ? catEl.value.trim() : "",
-    kandungan: descEl ? descEl.value.trim() : ""
-  };
+  const fTakwim = document.getElementById("form-add-takwim");
+  if (fTakwim) {
+    fTakwim.onsubmit = (e) => {
+      e.preventDefault();
+      const payload = {
+        tarikh: document.getElementById("takwim-date").value.trim(),
+        aktiviti: document.getElementById("takwim-act").value.trim(),
+        kategori: document.getElementById("takwim-cat").value.trim(),
+        tindakan: document.getElementById("takwim-action").value.trim()
+      };
+      postDataToScript("addTakwim", payload, "btn-submit-takwim").then(() => fTakwim.reset());
+    };
+  }
 
-  postDataToScript("addPengumuman", data, "btn-submit-ann").then(() => {
-    const form = document.getElementById("form-add-pengumuman");
-    if (form) form.reset();
-  });
-  return false;
-};
+  const fGuru = document.getElementById("form-add-guru");
+  if (fGuru) {
+    fGuru.onsubmit = (e) => {
+      e.preventDefault();
+      const payload = {
+        no: document.getElementById("guru-no").value.trim(),
+        nama: document.getElementById("guru-nama").value.trim(),
+        jawatan: document.getElementById("guru-jawatan").value.trim(),
+        gred: document.getElementById("guru-gred").value.trim()
+      };
+      postDataToScript("addGuru", payload, "btn-submit-guru").then(() => fGuru.reset());
+    };
+  }
+}
 
-window.submitNewTakwim = function(e) {
-  if (e && e.preventDefault) e.preventDefault();
-  const dateEl = document.getElementById("takwim-date");
-  const actEl = document.getElementById("takwim-act");
-  const catEl = document.getElementById("takwim-cat");
-  const actionEl = document.getElementById("takwim-action");
-
-  const data = {
-    tarikh: dateEl ? dateEl.value.trim() : "",
-    aktiviti: actEl ? actEl.value.trim() : "",
-    kategori: catEl ? catEl.value.trim() : "",
-    tindakan: actionEl ? actionEl.value.trim() : ""
-  };
-
-  postDataToScript("addTakwim", data, "btn-submit-takwim").then(() => {
-    const form = document.getElementById("form-add-takwim");
-    if (form) form.reset();
-  });
-  return false;
-};
-
-window.submitNewGuru = function(e) {
-  if (e && e.preventDefault) e.preventDefault();
-  const noEl = document.getElementById("guru-no");
-  const namaEl = document.getElementById("guru-nama");
-  const jawatanEl = document.getElementById("guru-jawatan");
-  const gredEl = document.getElementById("guru-gred");
-
-  const data = {
-    no: noEl ? noEl.value.trim() : "",
-    nama: namaEl ? namaEl.value.trim() : "",
-    jawatan: jawatanEl ? jawatanEl.value.trim() : "",
-    gred: gredEl ? gredEl.value.trim() : ""
-  };
-
-  postDataToScript("addGuru", data, "btn-submit-guru").then(() => {
-    const form = document.getElementById("form-add-guru");
-    if (form) form.reset();
-  });
-  return false;
-};
-
-// =================== PENGAMBILAN DATA (GET) ===================
+// =================== PENGAMBILAN DATA GET ===================
 async function fetchGoogleData() {
   const statusEl = document.getElementById("cms-status");
   const lastUpdatedEl = document.getElementById("last-updated");
 
   try {
     const res = await fetch(APPS_SCRIPT_URL);
-    if (!res.ok) throw new Error("Respons pelayan tidak sah");
+    if (!res.ok) throw new Error("Sambungan gagal");
 
     const data = await res.json();
-
     if (data.status === "success") {
-      if (data.pengumuman && data.pengumuman.length > 0) {
-        renderAnnouncements(data.pengumuman);
-      } else {
-        renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
-      }
-
-      if (data.guru && data.guru.length > 0) {
-        allTeachersData = data.guru;
-        renderTeachers(data.guru);
-      } else {
-        renderTeachers(FALLBACK_TEACHERS);
-      }
-
-      if (data.takwim && data.takwim.length > 0) {
-        renderTakwim(data.takwim);
-      } else {
-        renderTakwim(FALLBACK_TAKWIM);
-      }
+      renderAnnouncements(data.pengumuman && data.pengumuman.length ? data.pengumuman : FALLBACK_ANNOUNCEMENTS);
+      allTeachersData = data.guru && data.guru.length ? data.guru : FALLBACK_TEACHERS;
+      renderTeachers(allTeachersData);
+      renderTakwim(data.takwim && data.takwim.length ? data.takwim : FALLBACK_TAKWIM);
 
       if (statusEl) {
         statusEl.innerHTML = `<span class='text-emerald-700 font-semibold'><i class='fa-solid fa-circle-check text-emerald-500 mr-1'></i> Diselaraskan terus dari Google Sheets</span>`;
@@ -319,14 +342,12 @@ async function fetchGoogleData() {
         lastUpdatedEl.textContent = `Disemak: ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
       }
     } else {
-      throw new Error(data.message || "Gagal memproses fail JSON");
+      throw new Error(data.message);
     }
   } catch (err) {
-    console.warn("Gagal berhubung dengan Google Apps Script. Memaparkan data sandaran:", err);
     renderAnnouncements(FALLBACK_ANNOUNCEMENTS);
     renderTeachers(FALLBACK_TEACHERS);
     renderTakwim(FALLBACK_TAKWIM);
-
     if (statusEl) {
       statusEl.innerHTML = `<span class='text-amber-700 font-semibold'><i class='fa-solid fa-triangle-exclamation text-amber-500 mr-1'></i> Mod Sandaran: Memaparkan Data Pratetap 2026</span>`;
     }
@@ -334,10 +355,9 @@ async function fetchGoogleData() {
 }
 
 function renderAnnouncements(items) {
-  const container = document.getElementById("announcement-container");
-  if (!container) return;
-
-  container.innerHTML = items.map(item => `
+  const c = document.getElementById("announcement-container");
+  if (!c) return;
+  c.innerHTML = items.map(item => `
     <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-red-900 border-x border-b border-gray-100 flex flex-col justify-between hover:shadow-md transition">
       <div>
         <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
@@ -354,7 +374,6 @@ function renderAnnouncements(items) {
 function renderTeachers(teachers) {
   const tbody = document.getElementById("teachers-table-body");
   if (!tbody) return;
-
   tbody.innerHTML = teachers.map((t, idx) => `
     <tr class="hover:bg-red-50/40 transition">
       <td class="p-3 font-medium text-gray-500">${t.no || idx + 1}</td>
@@ -368,7 +387,6 @@ function renderTeachers(teachers) {
 function renderTakwim(events) {
   const tbody = document.getElementById("takwim-table-body");
   if (!tbody) return;
-
   tbody.innerHTML = events.map(e => `
     <tr class="hover:bg-gray-50 transition">
       <td class="p-3 font-bold text-red-950 whitespace-nowrap">${e.tarikh || "-"}</td>
@@ -380,10 +398,9 @@ function renderTakwim(events) {
 }
 
 function setupSearch() {
-  const searchInput = document.getElementById("teacher-search");
-  if (!searchInput) return;
-
-  searchInput.addEventListener("input", (e) => {
+  const s = document.getElementById("teacher-search");
+  if (!s) return;
+  s.addEventListener("input", (e) => {
     const val = e.target.value.toLowerCase().trim();
     const filtered = allTeachersData.filter(t => 
       (t.nama && t.nama.toLowerCase().includes(val)) || 
@@ -393,33 +410,3 @@ function setupSearch() {
     renderTeachers(filtered);
   });
 }
-
-function setupMobileMenu() {
-  const btn = document.getElementById("mobile-menu-btn");
-  const menu = document.getElementById("mobile-menu");
-  if (btn && menu) {
-    btn.onclick = () => menu.classList.toggle("hidden");
-  }
-}
-
-// Inisialisasi Aplikasi
-document.addEventListener("DOMContentLoaded", () => {
-  setupMobileMenu();
-  setupSearch();
-  window.checkAdminSession();
-
-  // Fail-safe: Pasang listener borang secara terus
-  const loginForm = document.getElementById("admin-login-form");
-  if (loginForm) loginForm.onsubmit = window.handleLogin;
-
-  const annForm = document.getElementById("form-add-pengumuman");
-  if (annForm) annForm.onsubmit = window.submitNewPengumuman;
-
-  const takwimForm = document.getElementById("form-add-takwim");
-  if (takwimForm) takwimForm.onsubmit = window.submitNewTakwim;
-
-  const guruForm = document.getElementById("form-add-guru");
-  if (guruForm) guruForm.onsubmit = window.submitNewGuru;
-
-  fetchGoogleData();
-});
