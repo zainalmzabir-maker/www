@@ -5,7 +5,7 @@
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJsneV6VGEqRbGnxHr1mpXpv2ihZUYcwSM6BFQvymaw36kIyZ1c3yhSw/exec";
 
-// Kredensial Log Masuk Pentadbir
+// Kredensial Log Masuk Admin
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "semekar@123";
 
@@ -48,19 +48,19 @@ const FALLBACK_ANNOUNCEMENTS = [
     tajuk: "Pendaftaran Sesi Persekolahan 2026",
     tarikh: "10 Januari 2026",
     kategori: "Penting",
-    kandungan: "Pendaftaran Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 diadakan di Dewan Semekar Hebat."
+    kandungan: "Pendaftaran Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 di Dewan Semekar Hebat[cite: 1]."
   },
   {
     tajuk: "Kejohanan Olahraga Tahunan Kali Ke-27",
     tarikh: "13 Februari 2026",
     kategori: "Kokurikulum",
-    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput memeriahkan acara."
+    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput memeriahkan kejohanan[cite: 1]."
   },
   {
     tajuk: "Program Transformasi Sekolah (TS25)",
     tarikh: "Sesi 2026",
     kategori: "Akademik",
-    kandungan: "Pembudayaan amalan PAK21 dan kemahiran berfikir aras tinggi (KBAT) untuk seluruh warga pelajar."
+    kandungan: "Pembudayaan amalan PAK21 dan kemahiran berfikir aras tinggi (KBAT) untuk seluruh warga pelajar[cite: 1]."
   }
 ];
 
@@ -74,12 +74,12 @@ const FALLBACK_TAKWIM = [
 
 let allTeachersData = [...FALLBACK_TEACHERS];
 
-// =================== PENGENDALIAN MODAL & SESI ===================
+// =================== LOGIK ADMIN & MODAL ===================
 function showLoginModal() {
   const modal = document.getElementById("login-modal");
   const err = document.getElementById("login-error");
   if (modal) modal.style.display = "flex";
-  if (err) err.classList.add("hidden");
+  if (err) err.style.display = "none";
 }
 
 function hideLoginModal() {
@@ -117,9 +117,29 @@ function updateAdminUI() {
   }
 }
 
-// =================== PERISTIWA DOM ===================
+function executeLogin() {
+  const userInput = document.getElementById("login-username");
+  const passInput = document.getElementById("login-password");
+  const err = document.getElementById("login-error");
+
+  const u = userInput ? userInput.value.trim().toLowerCase() : "";
+  const p = passInput ? passInput.value.trim() : "";
+
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    sessionStorage.setItem("semekar_admin", "true");
+    hideLoginModal();
+    updateAdminUI();
+    showAdminPanel();
+    if (userInput) userInput.value = "";
+    if (passInput) passInput.value = "";
+  } else {
+    if (err) err.style.display = "block";
+  }
+}
+
+// =================== INISIALISASI DOM ===================
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Butang Login Navigasi
+  // Pautan Butang Navigasi
   const navLoginBtn = document.getElementById("nav-login-btn");
   if (navLoginBtn) navLoginBtn.onclick = showLoginModal;
 
@@ -132,14 +152,14 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // 2. Butang Tutup Modal
+  // Butang Tutup
   const closeLoginBtn = document.getElementById("close-login-btn");
   if (closeLoginBtn) closeLoginBtn.onclick = hideLoginModal;
 
   const closePanelBtn = document.getElementById("close-panel-btn");
   if (closePanelBtn) closePanelBtn.onclick = hideAdminPanel;
 
-  // 3. Butang Panel Admin & Logout
+  // Butang Panel Admin & Logout
   const adminPanelBtn = document.getElementById("admin-panel-btn");
   if (adminPanelBtn) adminPanelBtn.onclick = showAdminPanel;
 
@@ -152,38 +172,23 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // 4. Form Log Masuk
-  const loginForm = document.getElementById("admin-login-form");
-  if (loginForm) {
-    loginForm.onsubmit = (e) => {
-      e.preventDefault();
-      const u = document.getElementById("login-username").value.trim().toLowerCase();
-      const p = document.getElementById("login-password").value.trim();
-      const err = document.getElementById("login-error");
+  // Butang Log Masuk (Bypass form submit)
+  const submitLoginBtn = document.getElementById("submit-login-btn");
+  if (submitLoginBtn) submitLoginBtn.onclick = executeLogin;
 
-      if (u === ADMIN_USER && p === ADMIN_PASS) {
-        sessionStorage.setItem("semekar_admin", "true");
-        hideLoginModal();
-        updateAdminUI();
-        showAdminPanel();
-        loginForm.reset();
-      } else {
-        if (err) err.classList.remove("hidden");
-      }
-    };
+  // Sokongan kekunci Enter pada borang login
+  const passInput = document.getElementById("login-password");
+  if (passInput) {
+    passInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") executeLogin();
+    });
   }
 
-  // 5. Penukaran Tab Admin
   setupAdminTabs();
-
-  // 6. Form Submission Admin
   setupAdminForms();
-
-  // 7. Carian & Menu Mobile
   setupSearch();
   setupMobileMenu();
 
-  // 8. Muat Data
   updateAdminUI();
   fetchGoogleData();
 });
@@ -227,7 +232,7 @@ function setupAdminTabs() {
   });
 }
 
-// =================== PENGHANTARAN POST KE APPS SCRIPT ===================
+// =================== POST DATA KE APPS SCRIPT ===================
 async function postDataToScript(action, data, submitBtnId) {
   const statusEl = document.getElementById("admin-action-status");
   const btn = document.getElementById(submitBtnId);
@@ -240,7 +245,7 @@ async function postDataToScript(action, data, submitBtnId) {
 
   if (statusEl) {
     statusEl.className = "mt-4 text-xs font-semibold text-blue-600 block";
-    statusEl.textContent = "Menghantar rekod ke Google Sheet...";
+    statusEl.textContent = "Menghantar maklumat ke Google Sheet...";
     statusEl.classList.remove("hidden");
   }
 
@@ -255,7 +260,7 @@ async function postDataToScript(action, data, submitBtnId) {
     if (result.status === "success") {
       if (statusEl) {
         statusEl.className = "mt-4 text-xs font-semibold text-emerald-600 block";
-        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Berjaya disimpan ke Google Sheet!`;
+        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Rekod berjaya disimpan ke Google Sheet!`;
       }
       fetchGoogleData();
     } else {
@@ -275,50 +280,65 @@ async function postDataToScript(action, data, submitBtnId) {
 }
 
 function setupAdminForms() {
-  const fAnn = document.getElementById("form-add-pengumuman");
-  if (fAnn) {
-    fAnn.onsubmit = (e) => {
-      e.preventDefault();
+  const btnAnn = document.getElementById("btn-submit-ann");
+  if (btnAnn) {
+    btnAnn.onclick = () => {
       const payload = {
         tajuk: document.getElementById("ann-title").value.trim(),
         tarikh: document.getElementById("ann-date").value.trim(),
         kategori: document.getElementById("ann-cat").value.trim(),
         kandungan: document.getElementById("ann-desc").value.trim()
       };
-      postDataToScript("addPengumuman", payload, "btn-submit-ann").then(() => fAnn.reset());
+      if (!payload.tajuk || !payload.kandungan) {
+        alert("Sila isi tajuk dan kandungan pengumuman.");
+        return;
+      }
+      postDataToScript("addPengumuman", payload, "btn-submit-ann").then(() => {
+        document.getElementById("form-add-pengumuman").reset();
+      });
     };
   }
 
-  const fTakwim = document.getElementById("form-add-takwim");
-  if (fTakwim) {
-    fTakwim.onsubmit = (e) => {
-      e.preventDefault();
+  const btnTakwim = document.getElementById("btn-submit-takwim");
+  if (btnTakwim) {
+    btnTakwim.onclick = () => {
       const payload = {
         tarikh: document.getElementById("takwim-date").value.trim(),
         aktiviti: document.getElementById("takwim-act").value.trim(),
         kategori: document.getElementById("takwim-cat").value.trim(),
         tindakan: document.getElementById("takwim-action").value.trim()
       };
-      postDataToScript("addTakwim", payload, "btn-submit-takwim").then(() => fTakwim.reset());
+      if (!payload.tarikh || !payload.aktiviti) {
+        alert("Sila isi tarikh dan aktiviti takwim.");
+        return;
+      }
+      postDataToScript("addTakwim", payload, "btn-submit-takwim").then(() => {
+        document.getElementById("form-add-takwim").reset();
+      });
     };
   }
 
-  const fGuru = document.getElementById("form-add-guru");
-  if (fGuru) {
-    fGuru.onsubmit = (e) => {
-      e.preventDefault();
+  const btnGuru = document.getElementById("btn-submit-guru");
+  if (btnGuru) {
+    btnGuru.onclick = () => {
       const payload = {
         no: document.getElementById("guru-no").value.trim(),
         nama: document.getElementById("guru-nama").value.trim(),
         jawatan: document.getElementById("guru-jawatan").value.trim(),
         gred: document.getElementById("guru-gred").value.trim()
       };
-      postDataToScript("addGuru", payload, "btn-submit-guru").then(() => fGuru.reset());
+      if (!payload.nama || !payload.jawatan) {
+        alert("Sila isi nama dan jawatan guru.");
+        return;
+      }
+      postDataToScript("addGuru", payload, "btn-submit-guru").then(() => {
+        document.getElementById("form-add-guru").reset();
+      });
     };
   }
 }
 
-// =================== PENGAMBILAN DATA GET ===================
+// =================== PENGAMBILAN DATA (GET) ===================
 async function fetchGoogleData() {
   const statusEl = document.getElementById("cms-status");
   const lastUpdatedEl = document.getElementById("last-updated");
