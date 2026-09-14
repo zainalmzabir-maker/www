@@ -5,7 +5,7 @@
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJsneV6VGEqRbGnxHr1mpXpv2ihZUYcwSM6BFQvymaw36kIyZ1c3yhSw/exec";
 
-// Data Sandaran Buku Pengurusan 2026[cite: 1]
+// Data Sandaran Buku Pengurusan 2026
 const FALLBACK_TEACHERS = [
   { no: 1, nama: "En. Abd Hadi bin Adman", jawatan: "Pengetua", gred: "DG13" },
   { no: 2, nama: "En. Masnon bin Amat", jawatan: "GPK Pentadbiran", gred: "DG12" },
@@ -44,19 +44,19 @@ const FALLBACK_ANNOUNCEMENTS = [
     tajuk: "Pendaftaran Sesi Persekolahan 2026",
     tarikh: "10 Januari 2026",
     kategori: "Penting",
-    kandungan: "Pendaftaran Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 di Dewan Semekar Hebat[cite: 1]."
+    kandungan: "Pendaftaran Tingkatan 1 dan pengesahan semula Tingkatan 2 hingga 5 di Dewan Semekar Hebat."
   },
   {
     tajuk: "Kejohanan Olahraga Tahunan Kali Ke-27",
     tarikh: "13 Februari 2026",
     kategori: "Kokurikulum",
-    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput hadir memeriahkan kejohanan[cite: 1]."
+    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput memeriahkan acara."
   },
   {
     tajuk: "Program Transformasi Sekolah (TS25)",
     tarikh: "Sesi 2026",
     kategori: "Akademik",
-    kandungan: "Pembudayaan amalan PAK21 dan kemahiran berfikir aras tinggi (KBAT) untuk kemenjadian murid[cite: 1]."
+    kandungan: "Pembudayaan amalan PAK21 dan kemahiran berfikir aras tinggi (KBAT) untuk seluruh warga pelajar."
   }
 ];
 
@@ -69,6 +69,110 @@ const FALLBACK_TAKWIM = [
 ];
 
 let allTeachersData = [...FALLBACK_TEACHERS];
+
+// =================== POST KE APPS SCRIPT ===================
+async function postDataToScript(action, data, submitBtnId) {
+  const statusEl = document.getElementById("admin-action-status");
+  const btn = document.getElementById(submitBtnId);
+
+  if (btn) {
+    btn.disabled = true;
+    btn.dataset.origText = btn.innerHTML;
+    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan...`;
+  }
+
+  if (statusEl) {
+    statusEl.className = "mt-4 text-xs font-semibold text-blue-600 block";
+    statusEl.textContent = "Menghantar maklumat ke Google Sheet...";
+    statusEl.classList.remove("hidden");
+  }
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: action, data: data })
+    });
+
+    const result = await res.json();
+    if (result.status === "success") {
+      if (statusEl) {
+        statusEl.className = "mt-4 text-xs font-semibold text-emerald-600 block";
+        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Maklumat berjaya disimpan ke Google Sheet!`;
+      }
+      fetchGoogleData();
+    } else {
+      throw new Error(result.message || "Gagal menyimpan");
+    }
+  } catch (err) {
+    if (statusEl) {
+      statusEl.className = "mt-4 text-xs font-semibold text-red-600 block";
+      statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Ralat: ${err.message}`;
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = btn.dataset.origText || "Simpan";
+    }
+  }
+}
+
+function submitNewPengumuman() {
+  const payload = {
+    tajuk: document.getElementById("ann-title").value.trim(),
+    tarikh: document.getElementById("ann-date").value.trim(),
+    kategori: document.getElementById("ann-cat").value.trim(),
+    kandungan: document.getElementById("ann-desc").value.trim()
+  };
+  if (!payload.tajuk || !payload.kandungan) {
+    alert("Sila isi tajuk dan kandungan ringkas.");
+    return;
+  }
+  postDataToScript("addPengumuman", payload, "btn-submit-ann").then(() => {
+    document.getElementById("ann-title").value = "";
+    document.getElementById("ann-date").value = "";
+    document.getElementById("ann-cat").value = "";
+    document.getElementById("ann-desc").value = "";
+  });
+}
+
+function submitNewTakwim() {
+  const payload = {
+    tarikh: document.getElementById("takwim-date").value.trim(),
+    aktiviti: document.getElementById("takwim-act").value.trim(),
+    kategori: document.getElementById("takwim-cat").value.trim(),
+    tindakan: document.getElementById("takwim-action").value.trim()
+  };
+  if (!payload.tarikh || !payload.aktiviti) {
+    alert("Sila isi tarikh dan aktiviti program.");
+    return;
+  }
+  postDataToScript("addTakwim", payload, "btn-submit-takwim").then(() => {
+    document.getElementById("takwim-date").value = "";
+    document.getElementById("takwim-act").value = "";
+    document.getElementById("takwim-cat").value = "";
+    document.getElementById("takwim-action").value = "";
+  });
+}
+
+function submitNewGuru() {
+  const payload = {
+    no: document.getElementById("guru-no").value.trim(),
+    nama: document.getElementById("guru-nama").value.trim(),
+    jawatan: document.getElementById("guru-jawatan").value.trim(),
+    gred: document.getElementById("guru-gred").value.trim()
+  };
+  if (!payload.nama || !payload.jawatan) {
+    alert("Sila isi nama dan jawatan guru.");
+    return;
+  }
+  postDataToScript("addGuru", payload, "btn-submit-guru").then(() => {
+    document.getElementById("guru-no").value = "";
+    document.getElementById("guru-nama").value = "";
+    document.getElementById("guru-jawatan").value = "";
+    document.getElementById("guru-gred").value = "";
+  });
+}
 
 // =================== PENGAMBILAN DATA (GET) ===================
 async function fetchGoogleData() {
@@ -160,110 +264,6 @@ function setupSearch() {
       (t.gred && t.gred.toLowerCase().includes(val))
     );
     renderTeachers(filtered);
-  });
-}
-
-// =================== POST DATA KE APPS SCRIPT ===================
-async function postDataToScript(action, data, submitBtnId) {
-  const statusEl = document.getElementById("admin-action-status");
-  const btn = document.getElementById(submitBtnId);
-
-  if (btn) {
-    btn.disabled = true;
-    btn.dataset.origText = btn.innerHTML;
-    btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan...`;
-  }
-
-  if (statusEl) {
-    statusEl.className = "mt-4 text-xs font-semibold text-blue-600 block";
-    statusEl.textContent = "Menghantar data ke Google Sheet...";
-    statusEl.classList.remove("hidden");
-  }
-
-  try {
-    const res = await fetch(APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({ action: action, data: data })
-    });
-
-    const result = await res.json();
-    if (result.status === "success") {
-      if (statusEl) {
-        statusEl.className = "mt-4 text-xs font-semibold text-emerald-600 block";
-        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Rekod berjaya disimpan ke Google Sheet!`;
-      }
-      fetchGoogleData();
-    } else {
-      throw new Error(result.message || "Gagal menyimpan");
-    }
-  } catch (err) {
-    if (statusEl) {
-      statusEl.className = "mt-4 text-xs font-semibold text-red-600 block";
-      statusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> Ralat: ${err.message}`;
-    }
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = btn.dataset.origText || "Simpan";
-    }
-  }
-}
-
-function submitNewPengumuman() {
-  const payload = {
-    tajuk: document.getElementById("ann-title").value.trim(),
-    tarikh: document.getElementById("ann-date").value.trim(),
-    kategori: document.getElementById("ann-cat").value.trim(),
-    kandungan: document.getElementById("ann-desc").value.trim()
-  };
-  if (!payload.tajuk || !payload.kandungan) {
-    alert("Sila lengkapkan maklumat pengumuman.");
-    return;
-  }
-  postDataToScript("addPengumuman", payload, "btn-submit-ann").then(() => {
-    document.getElementById("ann-title").value = "";
-    document.getElementById("ann-date").value = "";
-    document.getElementById("ann-cat").value = "";
-    document.getElementById("ann-desc").value = "";
-  });
-}
-
-function submitNewTakwim() {
-  const payload = {
-    tarikh: document.getElementById("takwim-date").value.trim(),
-    aktiviti: document.getElementById("takwim-act").value.trim(),
-    kategori: document.getElementById("takwim-cat").value.trim(),
-    tindakan: document.getElementById("takwim-action").value.trim()
-  };
-  if (!payload.tarikh || !payload.aktiviti) {
-    alert("Sila lengkapkan maklumat takwim.");
-    return;
-  }
-  postDataToScript("addTakwim", payload, "btn-submit-takwim").then(() => {
-    document.getElementById("takwim-date").value = "";
-    document.getElementById("takwim-act").value = "";
-    document.getElementById("takwim-cat").value = "";
-    document.getElementById("takwim-action").value = "";
-  });
-}
-
-function submitNewGuru() {
-  const payload = {
-    no: document.getElementById("guru-no").value.trim(),
-    nama: document.getElementById("guru-nama").value.trim(),
-    jawatan: document.getElementById("guru-jawatan").value.trim(),
-    gred: document.getElementById("guru-gred").value.trim()
-  };
-  if (!payload.nama || !payload.jawatan) {
-    alert("Sila lengkapkan maklumat guru.");
-    return;
-  }
-  postDataToScript("addGuru", payload, "btn-submit-guru").then(() => {
-    document.getElementById("guru-no").value = "";
-    document.getElementById("guru-nama").value = "";
-    document.getElementById("guru-jawatan").value = "";
-    document.getElementById("guru-gred").value = "";
   });
 }
 
