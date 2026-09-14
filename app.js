@@ -5,7 +5,7 @@
 
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwtIFAIyiMWOdDJsneV6VGEqRbGnxHr1mpXpv2ihZUYcwSM6BFQvymaw36kIyZ1c3yhSw/exec";
 
-// Data Sandaran Buku Pengurusan 2026
+// Data Sandaran Sesi 2026
 const FALLBACK_TEACHERS = [
   { no: 1, nama: "En. Abd Hadi bin Adman", jawatan: "Pengetua", gred: "DG13" },
   { no: 2, nama: "En. Masnon bin Amat", jawatan: "GPK Pentadbiran", gred: "DG12" },
@@ -50,7 +50,7 @@ const FALLBACK_ANNOUNCEMENTS = [
     tajuk: "Kejohanan Olahraga Tahunan Kali Ke-27",
     tarikh: "13 Februari 2026",
     kategori: "Kokurikulum",
-    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput memeriahkan acara."
+    kandungan: "Melibatkan Rumah Hatiora, Browalia, Kekwa, dan Mawar. Warga sekolah dijemput hadir memeriahkan kejohanan."
   },
   {
     tajuk: "Program Transformasi Sekolah (TS25)",
@@ -70,7 +70,7 @@ const FALLBACK_TAKWIM = [
 
 let allTeachersData = [...FALLBACK_TEACHERS];
 
-// =================== POST KE APPS SCRIPT ===================
+// =================== PENGHANTARAN POST KE APPS SCRIPT ===================
 async function postDataToScript(action, data, submitBtnId) {
   const statusEl = document.getElementById("admin-action-status");
   const btn = document.getElementById(submitBtnId);
@@ -83,7 +83,7 @@ async function postDataToScript(action, data, submitBtnId) {
 
   if (statusEl) {
     statusEl.className = "mt-4 text-xs font-semibold text-blue-600 block";
-    statusEl.textContent = "Menghantar maklumat ke Google Sheet...";
+    statusEl.textContent = "Menghantar data ke Google Sheet...";
     statusEl.classList.remove("hidden");
   }
 
@@ -98,7 +98,7 @@ async function postDataToScript(action, data, submitBtnId) {
     if (result.status === "success") {
       if (statusEl) {
         statusEl.className = "mt-4 text-xs font-semibold text-emerald-600 block";
-        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Maklumat berjaya disimpan ke Google Sheet!`;
+        statusEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Rekod berjaya disimpan ke Google Sheet!`;
       }
       fetchGoogleData();
     } else {
@@ -125,7 +125,7 @@ function submitNewPengumuman() {
     kandungan: document.getElementById("ann-desc").value.trim()
   };
   if (!payload.tajuk || !payload.kandungan) {
-    alert("Sila isi tajuk dan kandungan ringkas.");
+    alert("Sila isi tajuk dan kandungan pengumuman.");
     return;
   }
   postDataToScript("addPengumuman", payload, "btn-submit-ann").then(() => {
@@ -181,7 +181,7 @@ async function fetchGoogleData() {
 
   try {
     const res = await fetch(APPS_SCRIPT_URL);
-    if (!res.ok) throw new Error("Sambungan pelayan gagal");
+    if (!res.ok) throw new Error("Sambungan gagal");
 
     const data = await res.json();
     if (data.status === "success") {
