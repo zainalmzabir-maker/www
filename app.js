@@ -317,21 +317,51 @@ function renderTeachers(teachers) {
   }).join("");
 }
 
+// =================== PENGUMUMAN (DIKEMASKINI) ===================
 function renderAnnouncements(items) {
   const c = document.getElementById("announcement-container");
   if (!c) return;
-  c.innerHTML = items.map(item => `
-    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-red-900 border-x border-b border-gray-100 flex flex-col justify-between hover:shadow-md transition">
-      <div>
-        <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
-          <span><i class="fa-regular fa-calendar mr-1"></i> ${item.tarikh || "-"}</span>
-          <span class="bg-red-100 text-red-900 font-semibold px-2 py-0.5 rounded">${item.kategori || "Hebahan"}</span>
-        </div>
-        <h4 class="font-bold text-base text-gray-800 mb-2">${item.tajuk || "Pengumuman"}</h4>
-        <p class="text-xs text-gray-600 leading-relaxed">${item.kandungan || ""}</p>
+
+  if (!items || items.length === 0) {
+    c.className = "flex justify-center";
+    c.innerHTML = `
+      <div class="col-span-full text-center py-10 text-gray-400 text-xs">
+        <p>Tiada pengumuman semasa.</p>
       </div>
-    </div>
-  `).join("");
+    `;
+    return;
+  }
+
+  const count = items.length;
+
+  // Syarat susunan mengikut bilangan pengumuman:
+  // 1 = Tengah
+  // 2 = Sebelah-menyebelah berpusat di tengah
+  // 3 atau lebih = Grid biasa bermula dari kiri (terkini di kiri)
+  if (count === 1) {
+    c.className = "flex justify-center";
+  } else if (count === 2) {
+    c.className = "grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto";
+  } else {
+    c.className = "grid grid-cols-1 md:grid-cols-3 gap-6";
+  }
+
+  c.innerHTML = items.map((item) => {
+    const cardWidthClass = (count === 1) ? "w-full max-w-md" : "w-full";
+
+    return `
+      <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-red-900 border-x border-b border-gray-100 flex flex-col justify-between hover:shadow-md transition ${cardWidthClass}">
+        <div>
+          <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
+            <span><i class="fa-regular fa-calendar mr-1"></i> ${item.tarikh || "-"}</span>
+            <span class="bg-red-100 text-red-900 font-semibold px-2 py-0.5 rounded">${item.kategori || "Hebahan"}</span>
+          </div>
+          <h4 class="font-bold text-base text-gray-800 mb-2">${item.tajuk || "Pengumuman"}</h4>
+          <p class="text-xs text-gray-600 leading-relaxed">${item.kandungan || ""}</p>
+        </div>
+      </div>
+    `;
+  }).join("");
 }
 
 function renderTakwim(events) {
